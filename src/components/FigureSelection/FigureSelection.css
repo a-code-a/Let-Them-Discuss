@@ -61,6 +61,21 @@
   color: #666;
 }
 
+.figure-selection.dragging-over {
+  background-color: #f0f6ff;
+  border: 2px dashed #3498db;
+}
+
+.figure-card.dragging {
+  opacity: 0.5;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.figure-card:active {
+  cursor: grabbing;
+}
+
 @media (max-width: 768px) {
   .figure-selection {
     border-right: none;

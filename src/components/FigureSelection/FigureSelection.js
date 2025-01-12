@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { personas } from '../../services/personaService';
 import './FigureSelection.css';
 
@@ -17,13 +17,21 @@ const FigureSelection = ({ onSelectFigure, selectedFigures }) => {
     e.dataTransfer.setData('text/plain', figure.id);
   };
 
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+
   const handleDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDraggingOver(false);
   };
 
   const handleDrop = (e) => {
     e.preventDefault();
+    setIsDraggingOver(false);
     if (dragItem.current) {
       onSelectFigure(dragItem.current);
       dragItem.current = null;
@@ -31,9 +39,10 @@ const FigureSelection = ({ onSelectFigure, selectedFigures }) => {
   };
 
   return (
-    <div 
-      className="figure-selection"
+    <div
+      className={`figure-selection ${isDraggingOver ? 'dragging-over' : ''}`}
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       <h2>Drag figures into the chat room:</h2>

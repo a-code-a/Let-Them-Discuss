@@ -9,6 +9,32 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDiscussionActive, setIsDiscussionActive] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setIsDraggingOver(true);
+  };
+
+  const handleDragLeave = () => {
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDraggingOver(false);
+    const figureId = e.dataTransfer.getData('text/plain');
+    if (figureId) {
+      onRemoveFigure(figureId);
+    }
+  };
+
+  const handleFigureDragStart = (e, figure) => {
+    e.dataTransfer.setData('text/plain', figure.id);
+    e.dataTransfer.effectAllowed = 'move';
+    e.target.classList.add('dragging');
+  };
 
   const handleDiscussion = () => {
     setIsDiscussionActive(prev => !prev);
@@ -49,12 +75,22 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
 
   return (
     <div className={`chat-room ${isDiscussionActive ? 'discussion-active' : ''}`}>
-      <div className="chat-window">
+      <div
+        className={`chat-window ${isDraggingOver ? 'dragging-over' : ''}`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+      >
         <div className="active-figures">
           <h3>Active Figures:</h3>
           <div className="figure-list">
             {figures.map(figure => (
-              <div key={figure.id} className="active-figure">
+              <div
+                key={figure.id}
+                className="active-figure"
+                draggable
+                onDragStart={(e) => handleFigureDragStart(e, figure)}
+              >
                 <img
                   src={figure.image}
                   alt={figure.name}
