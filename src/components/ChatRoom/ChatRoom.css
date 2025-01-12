@@ -100,6 +100,41 @@
   background: #2980b9;
 }
 
+.active-figures {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.active-figures h3 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.figure-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.active-figure {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: #f8f9fa;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.active-figure .figure-avatar {
+  width: 24px;
+  height: 24px;
+}
+
 @media (max-width: 768px) {
   .chat-room {
     padding: 10px;

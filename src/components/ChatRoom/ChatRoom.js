@@ -50,6 +50,21 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
   return (
     <div className={`chat-room ${isDiscussionActive ? 'discussion-active' : ''}`}>
       <div className="chat-window">
+        <div className="active-figures">
+          <h3>Active Figures:</h3>
+          <div className="figure-list">
+            {figures.map(figure => (
+              <div key={figure.id} className="active-figure">
+                <img
+                  src={figure.image}
+                  alt={figure.name}
+                  className="figure-avatar"
+                />
+                <span>{figure.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
         {isDiscussionActive && (
           <div className="discussion-indicator">
             Discussion Mode Active - Join the conversation! Your insights will help guide the discussion.
