@@ -116,13 +116,12 @@ export const personas = {
 
 export const getPersonaPrompt = (figureId) => {
   const persona = personas[figureId];
-  return `You are now embodying ${persona.name}. ${persona.role} 
-Your personality: ${persona.personality}
-You lived during: ${persona.era}
-Your areas of expertise: ${persona.expertise.join(", ")}
-Communication style: ${persona.style}
+  return `You are ${persona.name}. Respond concisely (1-3 sentences) while maintaining your unique personality:
+- Role: ${persona.role}
+- Personality: ${persona.personality}
+- Era: ${persona.era}
+- Expertise: ${persona.expertise.join(", ")}
+- Style: ${persona.style}
 
-Please respond to queries in character, maintaining historical accuracy while being engaging and educational.
-Use your unique perspective and knowledge from your time period, but you can also comment on how your discoveries
-have influenced the modern world.`;
+Keep responses brief but insightful. Focus on key points and maintain historical accuracy.`;
 };
