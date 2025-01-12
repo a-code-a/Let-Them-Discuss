@@ -1,9 +1,14 @@
 import React, { useRef } from 'react';
-import { getFiguresList } from '../../services/chatService';
+import { personas } from '../../services/personaService';
 import './FigureSelection.css';
 
 const FigureSelection = ({ onSelectFigure, selectedFigures }) => {
-  const figures = getFiguresList();
+  const figures = Object.values(personas).map(persona => ({
+    id: persona.name,
+    name: persona.name,
+    image: `images/${persona.name.toLowerCase().replace(/ /g, '-')}.jpg`,
+    description: persona.role
+  }));
   const dragItem = useRef(null);
 
   const handleDragStart = (e, figure) => {
