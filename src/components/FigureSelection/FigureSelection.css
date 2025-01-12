@@ -1,0 +1,73 @@
+.figure-selection {
+  padding: 20px;
+  background: #f8f9fa;
+  border-right: 1px solid #ddd;
+  min-width: 300px;
+}
+
+.figure-selection h2 {
+  margin: 0 0 20px 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.figure-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.figure-card {
+  padding: 15px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.figure-card.selected {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.figure-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.figure-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.figure-info {
+  flex: 1;
+}
+
+.figure-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+}
+
+.figure-info p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .figure-selection {
+    border-right: none;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .figure-grid {
+    grid-template-columns: 1fr;
+  }
+}
