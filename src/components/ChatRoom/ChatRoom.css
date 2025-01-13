@@ -149,6 +149,8 @@
   background: #f8f9fa;
   width: 100%;
   flex-shrink: 0;
+  min-height: 80px;
+  box-sizing: border-box;
 }
 
 .message-input input {
@@ -170,6 +172,9 @@
   border: none;
   border-radius: 20px;
   cursor: pointer;
+  height: 45px;
+  min-width: 100px;
+  white-space: nowrap;
 }
 
 .message-input button:hover {
