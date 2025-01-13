@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { generateResponse } from '../../services/chatService';
+import { shuffle } from '../../services/personaService';
 import ChatMessage from './ChatMessage';
 import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
 import './ChatRoom.css';
@@ -13,6 +14,9 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
   const [topic, setTopic] = useState('');
+  const [isDiscussionActive, setIsDiscussionActive] = useState(false);
+  const [discussionQueue, setDiscussionQueue] = useState([]);
+  const [isProcessingQueue, setIsProcessingQueue] = useState(false);
 
   const handleRefresh = () => {
     setMessages([]);
@@ -74,39 +78,100 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     setMessages(prev => [...prev, systemMessage]);
   };
 
-  const handleSendMessage = async () => {
-    if (message.trim() && !isLoading) {
+  const startDiscussion = (initialMessage) => {
+    if (figures.length < 2) return;
+    
+    setIsDiscussionActive(true);
+    setMessage(initialMessage);
+    handleSendMessage(initialMessage, true);
+    
+    // Erstelle eine zufällige Reihenfolge der Figuren für die erste Runde
+    const shuffledFigures = shuffle([...figures]);
+    setDiscussionQueue(shuffledFigures);
+  };
+
+  const stopDiscussion = () => {
+    setIsDiscussionActive(false);
+    setDiscussionQueue([]);
+    setIsProcessingQueue(false);
+  };
+
+  const processDiscussionQueue = async () => {
+    if (!isDiscussionActive || isProcessingQueue || discussionQueue.length === 0) return;
+
+    setIsProcessingQueue(true);
+    const currentFigure = discussionQueue[0];
+    const newQueue = discussionQueue.slice(1);
+
+    try {
+      const topicContext = topic ? `Aktuelles Diskussionsthema: ${topic}. ` : '';
+      const context = `${topicContext}Du bist ${currentFigure.name}. Bitte antworte im Kontext der laufenden Diskussion, berücksichtige die vorherigen Nachrichten und stelle kritische Fragen oder gib Denkanstöße.`;
+      
+      const lastMessage = messages[messages.length - 1];
+      const response = await generateResponse(currentFigure, lastMessage.text + "\n\nContext: " + context);
+      
+      const aiMessage = {
+        figure: {
+          ...currentFigure,
+          image: `/images/${currentFigure.id}.jpg`
+        },
+        text: response,
+        timestamp: new Date().toISOString()
+      };
+      
+      setMessages(prev => [...prev, aiMessage]);
+      
+      // Füge die aktuelle Figur ans Ende der Warteschlange an
+      setDiscussionQueue([...newQueue, currentFigure]);
+      
+      // Warte einen Moment, bevor die nächste Antwort generiert wird
+      setTimeout(() => {
+        setIsProcessingQueue(false);
+      }, 2000);
+      
+    } catch (error) {
+      console.error(`Error getting response from ${currentFigure.name}:`, error);
+      setIsProcessingQueue(false);
+    }
+  };
+
+  const handleSendMessage = async (customMessage = null, isInitial = false) => {
+    const messageToSend = customMessage || message;
+    
+    if (messageToSend.trim() && !isLoading) {
       setIsLoading(true);
       
-      const topicContext = topic ? `Aktuelles Diskussionsthema: ${topic}. ` : '';
-      const context = `${topicContext}Bitte antworte im Kontext der laufenden Diskussion und berücksichtige die vorherigen Nachrichten.`;
-
-      const respondingFigures = currentSpeaker ? [currentSpeaker] : figures;
-
       const userMessage = {
         figure: { 
           name: 'User',
           image: '/images/default-avatar.svg'
         },
-        text: message,
+        text: messageToSend,
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, userMessage]);
       
-      for (const figure of respondingFigures) {
-        try {
-          const response = await generateResponse(figure, message + "\n\nContext: " + context);
-          const aiMessage = {
-            figure: {
-              ...figure,
-              image: `/images/${figure.id}.jpg`
-            },
-            text: response,
-            timestamp: new Date().toISOString()
-          };
-          setMessages(prev => [...prev, aiMessage]);
-        } catch (error) {
-          console.error(`Error getting response from ${figure.name}:`, error);
+      if (!isDiscussionActive) {
+        // Normaler Chat-Modus
+        const topicContext = topic ? `Aktuelles Diskussionsthema: ${topic}. ` : '';
+        const context = `${topicContext}Bitte antworte im Kontext der laufenden Diskussion und berücksichtige die vorherigen Nachrichten.`;
+        const respondingFigures = currentSpeaker ? [currentSpeaker] : figures;
+        
+        for (const figure of respondingFigures) {
+          try {
+            const response = await generateResponse(figure, messageToSend + "\n\nContext: " + context);
+            const aiMessage = {
+              figure: {
+                ...figure,
+                image: `/images/${figure.id}.jpg`
+              },
+              text: response,
+              timestamp: new Date().toISOString()
+            };
+            setMessages(prev => [...prev, aiMessage]);
+          } catch (error) {
+            console.error(`Error getting response from ${figure.name}:`, error);
+          }
         }
       }
       
@@ -114,6 +179,12 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isDiscussionActive && !isProcessingQueue && discussionQueue.length > 0) {
+      processDiscussionQueue();
+    }
+  }, [isDiscussionActive, isProcessingQueue, discussionQueue, messages]);
 
   useEffect(() => {
     // Scrolle immer zum Ende der Nachrichten
@@ -134,6 +205,9 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
         onRemoveParticipant={onRemoveFigure}
         currentSpeaker={currentSpeaker}
         topic={topic}
+        isDiscussionActive={isDiscussionActive}
+        onStartDiscussion={startDiscussion}
+        onStopDiscussion={stopDiscussion}
       />
       
       <div
@@ -205,8 +279,8 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder="Nachricht eingeben..."
-            disabled={isLoading}
+            placeholder={isDiscussionActive ? "Diskussion läuft automatisch..." : "Nachricht eingeben..."}
+            disabled={isLoading || isDiscussionActive}
           />
           <button 
             className="refresh-button" 

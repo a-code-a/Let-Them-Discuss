@@ -6,6 +6,35 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.discussion-controls {
+  margin-bottom: 20px;
+}
+
+.discussion-toggle {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.discussion-toggle:hover {
+  background-color: #218838;
+}
+
+.discussion-toggle.active {
+  background-color: #dc3545;
+}
+
+.discussion-toggle.active:hover {
+  background-color: #c82333;
+}
+
 .moderator-panel h3 {
   margin-top: 0;
   color: #333;
@@ -33,7 +62,8 @@
 }
 
 .topic-section button,
-.participant-controls button {
+.participant-controls button,
+.initial-message-section button {
   background-color: #4a90e2;
   color: white;
   border: none;
@@ -45,7 +75,8 @@
 }
 
 .topic-section button:hover,
-.participant-controls button:hover {
+.participant-controls button:hover,
+.initial-message-section button:hover {
   background-color: #357abd;
 }
 
@@ -83,11 +114,29 @@
   background-color: #c82333;
 }
 
+.initial-message-section textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  resize: vertical;
+  margin-bottom: 10px;
+}
+
+.initial-message-section textarea:disabled,
+.topic-section input:disabled,
 button:disabled {
-  background-color: #ccc;
+  background-color: #f8f9fa;
   cursor: not-allowed;
+  opacity: 0.7;
+}
+
+button:disabled {
+  background-color: #ccc !important;
 }
 
 button:disabled:hover {
-  background-color: #ccc;
+  background-color: #ccc !important;
 }
