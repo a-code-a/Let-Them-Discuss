@@ -13,6 +13,12 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
   const [topic, setTopic] = useState('');
 
+  const handleRefresh = () => {
+    setMessages([]);
+    setTopic('');
+    setCurrentSpeaker(null);
+  };
+
   const handleDragOver = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
@@ -178,6 +184,14 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
             placeholder="Nachricht eingeben..."
             disabled={isLoading}
           />
+          <button 
+            className="refresh-button" 
+            onClick={handleRefresh}
+            title="Chat löschen"
+            disabled={messages.length === 0}
+          >
+            ↻
+          </button>
           <button onClick={handleSendMessage} disabled={isLoading}>
             {isLoading ? 'Sende...' : 'Senden'}
           </button>
