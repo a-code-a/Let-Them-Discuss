@@ -44,7 +44,10 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const handleSetTopic = (newTopic) => {
     setTopic(newTopic);
     const systemMessage = {
-      figure: { name: 'System' },
+      figure: { 
+        name: 'System',
+        image: '/images/system-icon.svg'
+      },
       text: `Neues Diskussionsthema: ${newTopic}`,
       timestamp: new Date().toISOString()
     };
@@ -54,7 +57,10 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const handleSelectSpeaker = (figure) => {
     setCurrentSpeaker(figure);
     const systemMessage = {
-      figure: { name: 'System' },
+      figure: { 
+        name: 'System',
+        image: '/images/system-icon.svg'
+      },
       text: `${figure.name} hat das Wort erhalten.`,
       timestamp: new Date().toISOString()
     };
@@ -71,7 +77,10 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
       const respondingFigures = currentSpeaker ? [currentSpeaker] : figures;
 
       const userMessage = {
-        figure: { name: 'User' },
+        figure: { 
+          name: 'User',
+          image: '/images/default-avatar.svg'
+        },
         text: message,
         timestamp: new Date().toISOString()
       };
@@ -81,7 +90,10 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
         try {
           const response = await generateResponse(figure, message + "\n\nContext: " + context);
           const aiMessage = {
-            figure,
+            figure: {
+              ...figure,
+              image: `/images/${figure.id}.jpg`
+            },
             text: response,
             timestamp: new Date().toISOString()
           };

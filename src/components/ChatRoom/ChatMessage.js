@@ -6,9 +6,13 @@ const ChatMessage = ({ figure, text, timestamp }) => {
     <div className="chat-message">
       <div className="message-header">
         <img 
-          src={figure.image} 
+          src={figure.image || '/images/default-avatar.png'} 
           alt={figure.name} 
-          className="figure-avatar"
+          className={`figure-avatar ${figure.name === 'System' ? 'system-avatar' : ''}`}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = '/images/default-avatar.png';
+          }}
         />
         <div className="message-info">
           <span className="figure-name">{figure.name}</span>
