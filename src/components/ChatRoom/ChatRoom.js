@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { generateResponse } from '../../services/chatService';
 import ChatMessage from './ChatMessage';
 import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
@@ -6,6 +6,7 @@ import './ChatRoom.css';
 import './discussion-styles.css';
 
 const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
+  const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -114,6 +115,16 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     }
   };
 
+  useEffect(() => {
+    // Scrolle immer zum Ende der Nachrichten
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'nearest' 
+      });
+    }
+  }, [messages]);
+
   return (
     <div className="chat-room">
       <ModeratorPanel
@@ -173,6 +184,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
             />
           ))}
           {isLoading && <div className="loading-indicator">Generiere Antworten...</div>}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="message-input">
