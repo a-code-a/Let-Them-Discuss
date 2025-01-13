@@ -176,12 +176,24 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
 
         <div className="messages-container">
           {messages.map((msg, index) => (
-            <ChatMessage 
-              key={index}
-              figure={msg.figure}
-              text={msg.text}
-              timestamp={msg.timestamp}
-            />
+            <div key={index} className="chat-message">
+              <div className="message-left">
+                <img
+                  src={msg.figure.image}
+                  alt={msg.figure.name}
+                  className={msg.figure.name === 'System' ? 'system-avatar' : 'figure-avatar'}
+                />
+              </div>
+              <div className="message-right">
+                <div className="message-header">
+                  <span className="figure-name">{msg.figure.name}</span>
+                  <span className="message-time">
+                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+                <div className="message-text">{msg.text}</div>
+              </div>
+            </div>
           ))}
           {isLoading && <div className="loading-indicator">Generiere Antworten...</div>}
           <div ref={messagesEndRef} />
