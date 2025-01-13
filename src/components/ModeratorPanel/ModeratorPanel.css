@@ -1,0 +1,93 @@
+.moderator-panel {
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.moderator-panel h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.moderator-panel h4 {
+  color: #555;
+  margin: 15px 0 10px;
+}
+
+.topic-section form {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.topic-section input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.topic-section button,
+.participant-controls button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.topic-section button:hover,
+.participant-controls button:hover {
+  background-color: #357abd;
+}
+
+.participants-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.participant {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
+
+.participant.speaking {
+  background-color: #e3f2fd;
+  border-color: #2196f3;
+}
+
+.participant-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.participant-controls .remove-btn {
+  background-color: #dc3545;
+}
+
+.participant-controls .remove-btn:hover {
+  background-color: #c82333;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+button:disabled:hover {
+  background-color: #ccc;
+}

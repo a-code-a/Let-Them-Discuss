@@ -29,6 +29,7 @@ function App() {
         <ChatRoom 
           figures={figures}
           onRemoveFigure={handleRemoveFigure}
+          onAddFigure={handleAddFigure}
         />
       </div>
     </div>

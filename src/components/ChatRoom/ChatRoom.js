@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { generateResponse } from '../../services/chatService';
 import ChatMessage from './ChatMessage';
+import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
 import './ChatRoom.css';
 import './discussion-styles.css';
 
-const ChatRoom = ({ figures, onRemoveFigure }) => {
+const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDiscussionActive, setIsDiscussionActive] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const [currentSpeaker, setCurrentSpeaker] = useState(null);
+  const [topic, setTopic] = useState('');
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -24,29 +26,50 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
   const handleDrop = (e) => {
     e.preventDefault();
     setIsDraggingOver(false);
-    const figureId = e.dataTransfer.getData('text/plain');
-    if (figureId) {
-      onRemoveFigure(figureId);
+    try {
+      const figureData = JSON.parse(e.dataTransfer.getData('application/json'));
+      if (figureData && figureData.id && !figures.some(f => f.id === figureData.id)) {
+        const newFigure = {
+          id: figureData.id,
+          name: figureData.name,
+          era: figureData.era
+        };
+        onAddFigure(newFigure);
+      }
+    } catch (error) {
+      console.error('Error parsing dropped data:', error);
     }
   };
 
-  const handleFigureDragStart = (e, figure) => {
-    e.dataTransfer.setData('text/plain', figure.id);
-    e.dataTransfer.effectAllowed = 'move';
-    e.target.classList.add('dragging');
+  const handleSetTopic = (newTopic) => {
+    setTopic(newTopic);
+    const systemMessage = {
+      figure: { name: 'System' },
+      text: `Neues Diskussionsthema: ${newTopic}`,
+      timestamp: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, systemMessage]);
   };
 
-  const handleDiscussion = () => {
-    setIsDiscussionActive(prev => !prev);
+  const handleSelectSpeaker = (figure) => {
+    setCurrentSpeaker(figure);
+    const systemMessage = {
+      figure: { name: 'System' },
+      text: `${figure.name} hat das Wort erhalten.`,
+      timestamp: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, systemMessage]);
   };
 
   const handleSendMessage = async () => {
     if (message.trim() && !isLoading) {
       setIsLoading(true);
-      const context = isDiscussionActive ? 
-        "Please respond in the context of the ongoing discussion, considering the previous messages and other participants' viewpoints." :
-        "Please provide your perspective on this message.";
-      // Add user message
+      
+      const topicContext = topic ? `Aktuelles Diskussionsthema: ${topic}. ` : '';
+      const context = `${topicContext}Bitte antworte im Kontext der laufenden Diskussion und berücksichtige die vorherigen Nachrichten.`;
+
+      const respondingFigures = currentSpeaker ? [currentSpeaker] : figures;
+
       const userMessage = {
         figure: { name: 'User' },
         text: message,
@@ -54,8 +77,7 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
       };
       setMessages(prev => [...prev, userMessage]);
       
-      // Get AI responses from each figure
-      for (const figure of figures) {
+      for (const figure of respondingFigures) {
         try {
           const response = await generateResponse(figure, message + "\n\nContext: " + context);
           const aiMessage = {
@@ -68,13 +90,23 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
           console.error(`Error getting response from ${figure.name}:`, error);
         }
       }
+      
       setMessage('');
       setIsLoading(false);
     }
   };
 
   return (
-    <div className={`chat-room ${isDiscussionActive ? 'discussion-active' : ''}`}>
+    <div className="chat-room">
+      <ModeratorPanel
+        selectedFigures={figures}
+        onSetTopic={handleSetTopic}
+        onSelectSpeaker={handleSelectSpeaker}
+        onRemoveParticipant={onRemoveFigure}
+        currentSpeaker={currentSpeaker}
+        topic={topic}
+      />
+      
       <div
         className={`chat-window ${isDraggingOver ? 'dragging-over' : ''}`}
         onDragOver={handleDragOver}
@@ -82,30 +114,37 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
         onDrop={handleDrop}
       >
         <div className="active-figures">
-          <h3>Active Figures:</h3>
+          <h3>Aktive Teilnehmer:</h3>
           <div className="figure-list">
             {figures.map(figure => (
               <div
                 key={figure.id}
-                className="active-figure"
-                draggable
-                onDragStart={(e) => handleFigureDragStart(e, figure)}
+                className={`active-figure ${currentSpeaker?.id === figure.id ? 'speaking' : ''}`}
               >
                 <img
-                  src={figure.image}
+                  src={`/images/${figure.id}.jpg`}
                   alt={figure.name}
                   className="figure-avatar"
                 />
                 <span>{figure.name}</span>
+                <button 
+                  className="remove-figure"
+                  onClick={() => onRemoveFigure(figure.id)}
+                  title="Entfernen"
+                >
+                  ×
+                </button>
               </div>
             ))}
           </div>
         </div>
-        {isDiscussionActive && (
+
+        {topic && (
           <div className="discussion-indicator">
-            Discussion Mode Active - Join the conversation! Your insights will help guide the discussion.
+            Aktuelles Thema: {topic}
           </div>
         )}
+
         <div className="messages-container">
           {messages.map((msg, index) => (
             <ChatMessage 
@@ -115,25 +154,21 @@ const ChatRoom = ({ figures, onRemoveFigure }) => {
               timestamp={msg.timestamp}
             />
           ))}
-          {isLoading && <div className="loading-indicator">Generating responses...</div>}
+          {isLoading && <div className="loading-indicator">Generiere Antworten...</div>}
         </div>
+
         <div className="message-input">
           <input
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder="Type a message..."
+            placeholder="Nachricht eingeben..."
             disabled={isLoading}
           />
           <button onClick={handleSendMessage} disabled={isLoading}>
-            {isLoading ? 'Sending...' : 'Send'}
+            {isLoading ? 'Sende...' : 'Senden'}
           </button>
-          {messages.length > 0 && figures.length > 1 && (
-            <button onClick={handleDiscussion} disabled={isLoading}>
-              {isLoading ? 'Discussing...' : 'Start Discussion'}
-            </button>
-          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 .chat-room {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  gap: 20px;
   padding: 20px;
   background: #f8f9fa;
 }
@@ -29,6 +29,11 @@
 .active-figure.dragging {
   opacity: 0.5;
   transform: scale(0.95);
+}
+
+.active-figure.speaking {
+  background-color: #e3f2fd;
+  border: 1px solid #2196f3;
 }
 
 .messages-container {
@@ -115,6 +120,11 @@
   background: #2980b9;
 }
 
+.message-input button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
 .active-figures {
   margin-bottom: 20px;
   padding: 15px;
@@ -143,6 +153,36 @@
   background: #f8f9fa;
   border-radius: 20px;
   font-size: 14px;
+  position: relative;
+}
+
+.remove-figure {
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.active-figure:hover .remove-figure {
+  opacity: 1;
+}
+
+.remove-figure:hover {
+  background: #c0392b;
 }
 
 .active-figure .figure-avatar {
@@ -150,8 +190,25 @@
   height: 24px;
 }
 
+.discussion-indicator {
+  padding: 10px 15px;
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border-radius: 4px;
+  margin: 10px 15px;
+  font-size: 14px;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 10px;
+  color: #666;
+  font-style: italic;
+}
+
 @media (max-width: 768px) {
   .chat-room {
+    flex-direction: column;
     padding: 10px;
   }
   
