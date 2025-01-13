@@ -14,7 +14,6 @@ const ModeratorPanel = ({
   isDiscussionActive: externalIsDiscussionActive 
 }) => {
   const [newTopic, setNewTopic] = useState('');
-  const [initialMessage, setInitialMessage] = useState('');
   const [isDiscussionActive, setIsDiscussionActive] = useState(false);
 
   const handleTopicSubmit = (e) => {
@@ -23,23 +22,16 @@ const ModeratorPanel = ({
     setNewTopic('');
   };
 
-  const handleInitialMessageSubmit = (e) => {
-    e.preventDefault();
-    if (initialMessage.trim()) {
-      onStartDiscussion(initialMessage);
-    }
-  };
-
   const toggleDiscussion = () => {
-    if (!isDiscussionActive && (!topic || !initialMessage || selectedFigures.length < 2)) {
-      alert('Bitte setzen Sie ein Thema, geben Sie eine initiale Nachricht ein und wählen Sie mindestens 2 Teilnehmer aus.');
+    if (!isDiscussionActive && (!topic || selectedFigures.length < 2)) {
+      alert('Bitte setzen Sie ein Thema und wählen Sie mindestens 2 Teilnehmer aus.');
       return;
     }
     
     if (isDiscussionActive) {
       onStopDiscussion();
     } else {
-      handleInitialMessageSubmit({ preventDefault: () => {} });
+      onStartDiscussion();
     }
     
     setIsDiscussionActive(!isDiscussionActive);
@@ -71,18 +63,6 @@ const ModeratorPanel = ({
           <button type="submit" disabled={isDiscussionActive}>Thema setzen</button>
         </form>
         {topic && <p>Aktuelles Thema: {topic}</p>}
-      </div>
-
-      <div className="initial-message-section">
-        <h4>Initiale Nachricht</h4>
-        <form onSubmit={handleInitialMessageSubmit}>
-          <textarea
-            value={initialMessage}
-            onChange={(e) => setInitialMessage(e.target.value)}
-            placeholder="Geben Sie hier Ihre erste Nachricht ein, um die Diskussion zu starten..."
-            disabled={isDiscussionActive}
-          />
-        </form>
       </div>
 
       <div className="participants-section">

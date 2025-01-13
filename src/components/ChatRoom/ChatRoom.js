@@ -78,13 +78,9 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     setMessages(prev => [...prev, systemMessage]);
   };
 
-  const startDiscussion = (initialMessage) => {
+  const startDiscussion = () => {
     if (figures.length < 2) return;
-    
     setIsDiscussionActive(true);
-    setMessage(initialMessage);
-    handleSendMessage(initialMessage, true);
-    
     // Erstelle eine zufällige Reihenfolge der Figuren für die erste Runde
     const shuffledFigures = shuffle([...figures]);
     setDiscussionQueue(shuffledFigures);
@@ -135,10 +131,8 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     }
   };
 
-  const handleSendMessage = async (customMessage = null, isInitial = false) => {
-    const messageToSend = customMessage || message;
-    
-    if (messageToSend.trim() && !isLoading) {
+  const handleSendMessage = async () => {
+    if (message.trim() && !isLoading) {
       setIsLoading(true);
       
       const userMessage = {
@@ -146,7 +140,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
           name: 'User',
           image: '/images/default-avatar.svg'
         },
-        text: messageToSend,
+        text: message,
         timestamp: new Date().toISOString()
       };
       setMessages(prev => [...prev, userMessage]);
@@ -159,7 +153,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
         
         for (const figure of respondingFigures) {
           try {
-            const response = await generateResponse(figure, messageToSend + "\n\nContext: " + context);
+            const response = await generateResponse(figure, message + "\n\nContext: " + context);
             const aiMessage = {
               figure: {
                 ...figure,
@@ -173,6 +167,10 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
             console.error(`Error getting response from ${figure.name}:`, error);
           }
         }
+      } else if (discussionQueue.length === 0) {
+        // Starte die Diskussion mit der ersten Nachricht
+        const shuffledFigures = shuffle([...figures]);
+        setDiscussionQueue(shuffledFigures);
       }
       
       setMessage('');
