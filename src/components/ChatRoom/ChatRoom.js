@@ -135,6 +135,15 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     if (message.trim() && !isLoading) {
       setIsLoading(true);
       
+      // Überprüfe auf Thema-Befehl
+      if (message.toLowerCase().startsWith('/thema ')) {
+        const newTopic = message.slice(7).trim();
+        handleSetTopic(newTopic);
+        setMessage('');
+        setIsLoading(false);
+        return;
+      }
+      
       const userMessage = {
         figure: { 
           name: 'User',
@@ -277,7 +286,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-            placeholder={isDiscussionActive ? "Diskussion läuft automatisch..." : "Nachricht eingeben..."}
+            placeholder={isDiscussionActive ? "Diskussion läuft automatisch..." : "Nachricht eingeben... (/thema für neues Thema)"}
             disabled={isLoading || isDiscussionActive}
           />
           <button 

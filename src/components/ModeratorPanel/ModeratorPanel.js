@@ -3,7 +3,6 @@ import './ModeratorPanel.css';
 
 const ModeratorPanel = ({ 
   selectedFigures,
-  onSetTopic,
   onSelectSpeaker,
   onRemoveParticipant,
   onAddParticipant,
@@ -13,18 +12,11 @@ const ModeratorPanel = ({
   onStopDiscussion,
   isDiscussionActive: externalIsDiscussionActive 
 }) => {
-  const [newTopic, setNewTopic] = useState('');
   const [isDiscussionActive, setIsDiscussionActive] = useState(false);
 
-  const handleTopicSubmit = (e) => {
-    e.preventDefault();
-    onSetTopic(newTopic);
-    setNewTopic('');
-  };
-
   const toggleDiscussion = () => {
-    if (!isDiscussionActive && (!topic || selectedFigures.length < 2)) {
-      alert('Bitte setzen Sie ein Thema und wählen Sie mindestens 2 Teilnehmer aus.');
+    if (!isDiscussionActive && selectedFigures.length < 2) {
+      alert('Bitte wählen Sie mindestens 2 Teilnehmer aus.');
       return;
     }
     
@@ -50,20 +42,12 @@ const ModeratorPanel = ({
         </button>
       </div>
 
-      <div className="topic-section">
-        <h4>Diskussionsthema</h4>
-        <form onSubmit={handleTopicSubmit}>
-          <input
-            type="text"
-            value={newTopic}
-            onChange={(e) => setNewTopic(e.target.value)}
-            placeholder="Neues Thema eingeben"
-            disabled={isDiscussionActive}
-          />
-          <button type="submit" disabled={isDiscussionActive}>Thema setzen</button>
-        </form>
-        {topic && <p>Aktuelles Thema: {topic}</p>}
-      </div>
+      {topic && (
+        <div className="topic-display">
+          <h4>Aktuelles Thema:</h4>
+          <p>{topic}</p>
+        </div>
+      )}
 
       <div className="participants-section">
         <h4>Teilnehmer</h4>
