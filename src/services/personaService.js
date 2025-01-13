@@ -123,5 +123,5 @@ export const getPersonaPrompt = (figureId) => {
 - Expertise: ${persona.expertise.join(", ")}
 - Style: ${persona.style}
 
-Keep responses brief but insightful. Focus on key points and maintain historical accuracy.`;
+Respond directly without any introductory phrases or descriptions of your tone. Keep responses brief but insightful. Focus on key points and maintain historical accuracy.`;
 };
