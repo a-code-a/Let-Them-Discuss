@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { generateResponse } from '../../services/chatService';
+import { generateResponse } from '../../services/personaService';
 
 const Chat = ({ figure }) => {
   const [messages, setMessages] = useState([]);

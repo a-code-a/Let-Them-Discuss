@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { generateResponse } from '../../services/chatService';
-import { shuffle } from '../../services/personaService';
-import ChatMessage from './ChatMessage';
+import { generateResponse, shuffle } from '../../services/personaService';
+import ChatMessage from './subcomponents/ChatMessage';
 import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
 import './ChatRoom.css';
-import './discussion-styles.css';
+
 
 const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const messagesEndRef = useRef(null);

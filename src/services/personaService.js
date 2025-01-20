@@ -1,4 +1,29 @@
-// Persona configurations for historical figures
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic({
+  apiKey: process.env.REACT_APP_ANTHROPIC_API_KEY,
+  dangerouslyAllowBrowser: true
+});
+
+// Persona configurations and chat functionality
+export const shuffle = (array) => [...array].sort(() => Math.random() - 0.5);
+
+export const generateResponse = async (figure, message) => {
+  try {
+    const persona = personas[figure.id];
+    const response = await anthropic.messages.create({
+      model: 'claude-3-haiku-20240307',
+      max_tokens: 1000,
+      system: `${persona.role}\n${persona.personality}`,
+      messages: [{ role: 'user', content: message }]
+    });
+    return response.content[0]?.text || '';
+  } catch (error) {
+    console.error('Error generating response:', error);
+    return 'I apologize, but I am temporarily unable to respond.';
+  }
+};
+
 export const personas = {
   // Antike (vor 500 v. Chr. - 500 n. Chr.)
   "Socrates": {
@@ -189,11 +214,3 @@ export const getGroupedPersonas = () => {
   return groups;
 };
 
-export const shuffle = (array) => {
-  const newArray = [...array];
-  for (let i = newArray.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-  }
-  return newArray;
-};

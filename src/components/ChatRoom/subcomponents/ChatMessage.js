@@ -1,5 +1,5 @@
 import React from 'react';
-import './ChatRoom.css';
+import '../ChatRoom.css';
 
 const ChatMessage = ({ figure, text, timestamp }) => {
   return (
