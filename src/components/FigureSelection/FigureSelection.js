@@ -10,9 +10,6 @@ const FigureSelection = ({ onSelectFigure }) => {
     setExpandedEra(expandedEra === era ? null : era);
   };
 
-  const handleFigureClick = (figureId) => {
-    onSelectFigure(figureId);
-  };
 
   return (
     <div className="figure-selection">

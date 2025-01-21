@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { generateResponse, shuffle } from '../../services/personaService';
 import ChatMessage from './subcomponents/ChatMessage';
 import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
@@ -9,7 +9,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [chatHistory, setChatHistory] = useState([]);
+  const [, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
@@ -191,7 +191,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     if (isDiscussionActive && !isProcessingQueue && discussionQueue.length > 0) {
       processDiscussionQueue();
     }
-  }, [isDiscussionActive, isProcessingQueue, discussionQueue, messages]);
+  }, [isDiscussionActive, isProcessingQueue, discussionQueue, messages, processDiscussionQueue]);
 
   useEffect(() => {
     // Scrolle immer zum Ende der Nachrichten

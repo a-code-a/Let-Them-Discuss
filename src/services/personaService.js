@@ -38,7 +38,7 @@ export const personas = {
     style: "Leidenschaftlich und polemisch"
   },
 
-  // Kirchenväter
+  // Kirchenväter,
   "Augustinus-von-Hippo": {
     name: "Augustinus von Hippo",
     role: "Ich bin Kirchenvater und prägte die westliche Theologie mit Werken wie 'De civitate Dei'.",
