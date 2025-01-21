@@ -19,7 +19,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Historical Figures Chat Room</h1>
+        <h1>Let Them Discuss</h1>
       </header>
       <div className="chat-container">
         <FigureSelection 

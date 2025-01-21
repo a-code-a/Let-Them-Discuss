@@ -85,15 +85,15 @@ export const personas = {
     expertise: ["Ethik", "Kirche und Gesellschaft", "Spiritualität", "Politische Theologie"],
     style: "Engagiert und prophetisch"
   },
-  "Martin-Luther": {
-    name: "Martin Luther",
-    role: "I am Martin Luther, a German theologian and key figure in the Protestant Reformation. I challenged the practices of the Catholic Church and translated the Bible into German.",
-    personality: "I will not bow to corrupt authority or false doctrine. The truth must be spoken, no matter how uncomfortable or dangerous. I will challenge your beliefs and force you to confront the hypocrisy in your faith. Prepare for a theological reckoning.",
-    era: "1483-1546",
-    century: 15,
-    expertise: ["Theology", "Religious Reform", "Translation", "Education"],
-    style: "Fiery, uncompromising, and confrontational"
-  },
+ "Martin-Luther": {
+name: "Martin Luther",
+role: "Ich bin Martin Luther, ein deutscher Theologe und eine Schlüsselfigur der protestantischen Reformation. Ich habe die Praktiken der katholischen Kirche in Frage gestellt und die Bibel ins Deutsche übersetzt.",
+personality: "Ich werde mich nicht vor korrupter Autorität oder falscher Lehre beugen. Die Wahrheit muss gesprochen werden, egal wie unbequem oder gefährlich sie ist. Ich werde Ihre Überzeugungen herausfordern und Sie dazu zwingen, die Heuchelei in Ihrem Glauben zu konfrontieren. Bereiten Sie sich auf eine theologische Abrechnung vor.",
+era: "1483-1546",
+century: 15,
+expertise: ["Theologie", "Religionsreform", "Übersetzung", "Bildung"],
+style: "Feurig, kompromisslos und konfrontativ"
+}
 };
 
 export const getPersonaPrompt = (figureId) => {
@@ -113,25 +113,27 @@ export const getPersonaPrompt = (figureId) => {
 
 export const getGroupedPersonas = () => {
   const groups = {
-    'Antike (vor 500 v. Chr. - 500 n. Chr.)': [],
-    'Mittelalter & Renaissance (500-1600)': [],
-    'Aufklärung (1600-1800)': [],
-    'Industrielle Revolution & Moderne (1800-1950)': [],
-    'Moderne & Computerzeitalter (1900-2000)': []
+    'Biblische Figuren': [],
+    'Kirchenväter & Scholastiker': [],
+    'Reformatoren': [],
+    'Systematische Theologen': [],
+    'Ethiker & Praktische Theologen': []
   };
 
   Object.entries(personas).forEach(([id, persona]) => {
-    const { name, era, century } = persona;
-    if (century <= 5) {
-      groups['Antike (vor 500 v. Chr. - 500 n. Chr.)'].push({ id, name, era });
-    } else if (century <= 16) {
-      groups['Mittelalter & Renaissance (500-1600)'].push({ id, name, era });
-    } else if (century <= 18) {
-      groups['Aufklärung (1600-1800)'].push({ id, name, era });
-    } else if (century <= 19) {
-      groups['Industrielle Revolution & Moderne (1800-1950)'].push({ id, name, era });
+    const { name, era, expertise } = persona;
+    const entry = { id, name, era };
+    
+    if (id === "Paulus") {
+      groups['Biblische Figuren'].push(entry);
+    } else if (id === "Augustinus-von-Hippo" || id === "Thomas-von-Aquin") {
+      groups['Kirchenväter & Scholastiker'].push(entry);
+    } else if (id === "Martin-Luther" || id === "Johannes-Calvin") {
+      groups['Reformatoren'].push(entry);
+    } else if (expertise.includes("Dogmatik") || expertise.includes("Christologie")) {
+      groups['Systematische Theologen'].push(entry);
     } else {
-      groups['Moderne & Computerzeitalter (1900-2000)'].push({ id, name, era });
+      groups['Ethiker & Praktische Theologen'].push(entry);
     }
   });
 
