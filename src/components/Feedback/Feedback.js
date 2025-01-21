@@ -3,6 +3,8 @@ import './Feedback.css';
 
 const Feedback = ({ onClose }) => {
   const [feedback, setFeedback] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
   const [feedbackList, setFeedbackList] = useState(() => {
     const saved = localStorage.getItem('feedbackList');
     return saved ? JSON.parse(saved).map(item => ({
@@ -17,6 +19,8 @@ const Feedback = ({ onClose }) => {
     const newFeedback = {
       id: Date.now(),
       text: feedback,
+      userName: userName.trim() || 'Anonym',
+      userEmail: userEmail.trim(),
       upvotes: 0,
       downvotes: 0,
       timestamp: new Date().toISOString()
@@ -26,6 +30,8 @@ const Feedback = ({ onClose }) => {
     setFeedbackList(updatedList);
     localStorage.setItem('feedbackList', JSON.stringify(updatedList));
     setFeedback('');
+    setUserName('');
+    setUserEmail('');
   };
 
   const handleVote = (id, isUpvote) => {
@@ -61,6 +67,23 @@ const Feedback = ({ onClose }) => {
             <h2>Feedback</h2>
             <p>Wir freuen uns über Ihre Rückmeldung!</p>
             <form onSubmit={handleSubmit}>
+              <div className="user-info-inputs">
+                <input
+                  type="text"
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  placeholder="Ihr Name (optional)"
+                  className="feedback-input"
+                />
+                <input
+                  type="email"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  placeholder="Ihre E-Mail (optional)"
+                  className="feedback-input"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                />
+              </div>
               <textarea
                 value={feedback}
                 onChange={(e) => setFeedback(e.target.value)}
@@ -96,8 +119,12 @@ const Feedback = ({ onClose }) => {
                   </div>
                   <div className="feedback-content-wrapper">
                     <div className="feedback-text">{item.text}</div>
-                    <div className="feedback-time">
-                      {new Date(item.timestamp).toLocaleTimeString()}
+                    <div className="feedback-user-info">
+                      <div className="feedback-user-name">{item.userName}</div>
+                      <div className="feedback-datetime">
+                        {new Date(item.timestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
+                        {new Date(item.timestamp).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                      </div>
                     </div>
                   </div>
                   <button 
