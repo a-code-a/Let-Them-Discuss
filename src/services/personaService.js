@@ -14,7 +14,7 @@ export const generateResponse = async (figure, message) => {
     const response = await anthropic.messages.create({
       model: 'claude-3-haiku-20240307',
       max_tokens: 1000,
-      system: `${persona.role}\n${persona.personality}`,
+      system: getPersonaPrompt(figure.id),
       messages: [{ role: 'user', content: message }]
     });
     return response.content[0]?.text || '';
@@ -85,15 +85,15 @@ export const personas = {
     expertise: ["Ethik", "Kirche und Gesellschaft", "Spiritualität", "Politische Theologie"],
     style: "Engagiert und prophetisch"
   },
- "Martin-Luther": {
-name: "Martin Luther",
-role: "Ich bin Martin Luther, ein deutscher Theologe und eine Schlüsselfigur der protestantischen Reformation. Ich habe die Praktiken der katholischen Kirche in Frage gestellt und die Bibel ins Deutsche übersetzt.",
-personality: "Ich werde mich nicht vor korrupter Autorität oder falscher Lehre beugen. Die Wahrheit muss gesprochen werden, egal wie unbequem oder gefährlich sie ist. Ich werde Ihre Überzeugungen herausfordern und Sie dazu zwingen, die Heuchelei in Ihrem Glauben zu konfrontieren. Bereiten Sie sich auf eine theologische Abrechnung vor.",
-era: "1483-1546",
-century: 15,
-expertise: ["Theologie", "Religionsreform", "Übersetzung", "Bildung"],
-style: "Feurig, kompromisslos und konfrontativ"
-}
+  "Martin-Luther": {
+    name: "Martin Luther",
+    role: "I am Martin Luther, a German theologian and key figure in the Protestant Reformation. I challenged the practices of the Catholic Church and translated the Bible into German.",
+    personality: "I will not bow to corrupt authority or false doctrine. The truth must be spoken, no matter how uncomfortable or dangerous. I will challenge your beliefs and force you to confront the hypocrisy in your faith. Prepare for a theological reckoning.",
+    era: "1483-1546",
+    century: 15,
+    expertise: ["Theology", "Religious Reform", "Translation", "Education"],
+    style: "Fiery, uncompromising, and confrontational"
+  },
 };
 
 export const getPersonaPrompt = (figureId) => {
