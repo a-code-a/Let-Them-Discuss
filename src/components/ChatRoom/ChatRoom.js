@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { generateResponse, shuffle } from '../../services/personaService';
-import ChatMessage from './subcomponents/ChatMessage';
 import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
 import './ChatRoom.css';
 
@@ -9,7 +8,8 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-  const [, setChatHistory] = useState([]);
+// eslint-disable-next-line no-unused-vars
+const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
@@ -92,7 +92,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
     setIsProcessingQueue(false);
   };
 
-  const processDiscussionQueue = async () => {
+const processDiscussionQueue = useCallback(async () => {
     if (!isDiscussionActive || isProcessingQueue || discussionQueue.length === 0) return;
 
     setIsProcessingQueue(true);
@@ -116,20 +116,14 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
       };
       
       setMessages(prev => [...prev, aiMessage]);
-      
-      // Füge die aktuelle Figur ans Ende der Warteschlange an
       setDiscussionQueue([...newQueue, currentFigure]);
       
-      // Warte einen Moment, bevor die nächste Antwort generiert wird
-      setTimeout(() => {
-        setIsProcessingQueue(false);
-      }, 2000);
-      
+      setTimeout(() => setIsProcessingQueue(false), 2000);
     } catch (error) {
       console.error(`Error getting response from ${currentFigure.name}:`, error);
       setIsProcessingQueue(false);
     }
-  };
+  }, [isDiscussionActive, isProcessingQueue, discussionQueue, topic, messages, setMessages, setIsProcessingQueue]);
 
   const handleSendMessage = async () => {
     if (message.trim() && !isLoading) {
