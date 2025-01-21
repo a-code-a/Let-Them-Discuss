@@ -16,7 +16,7 @@ const FigureSelection = ({ onSelectFigure }) => {
 
   return (
     <div className="figure-selection">
-      <h2>Historische Persönlichkeiten</h2>
+      <h2>Theologen</h2>
       <div className="eras-container">
         {Object.entries(groupedPersonas).map(([era, figures]) => (
           <div 
