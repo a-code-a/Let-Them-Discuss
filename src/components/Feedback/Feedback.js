@@ -19,7 +19,7 @@ const Feedback = ({ onClose }) => {
     const newFeedback = {
       id: Date.now(),
       text: feedback,
-      userName: userName.trim() || 'Anonym',
+      userName: userName.trim(),
       userEmail: userEmail.trim(),
       upvotes: 0,
       downvotes: 0,
@@ -72,8 +72,10 @@ const Feedback = ({ onClose }) => {
                   type="text"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
-                  placeholder="Ihr Name (optional)"
+                  placeholder="Ihr Name*"
                   className="feedback-input"
+                  required
+                  minLength="2"
                 />
                 <input
                   type="email"
