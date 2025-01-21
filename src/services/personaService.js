@@ -1,7 +1,8 @@
-import Anthropic from '@anthropic-ai/sdk';
+import OpenAI from 'openai';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.REACT_APP_ANTHROPIC_API_KEY,
+const deepseek = new OpenAI({
+  apiKey: process.env.REACT_APP_DEEPSEEK_API_KEY,
+  baseURL: 'https://api.deepseek.com/v1',
   dangerouslyAllowBrowser: true
 });
 
@@ -10,13 +11,16 @@ export const shuffle = (array) => [...array].sort(() => Math.random() - 0.5);
 
 export const generateResponse = async (figure, message) => {
   try {
-    const response = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
+    const response = await deepseek.chat.completions.create({
+      model: 'deepseek-reasoner',
       max_tokens: 1000,
-      system: getPersonaPrompt(figure.id),
-      messages: [{ role: 'user', content: message }]
+      messages: [
+        { role: 'system', content: getPersonaPrompt(figure.id) },
+        { role: 'user', content: message }
+      ],
+      stream: false
     });
-    return response.content[0]?.text || '';
+    return response.choices[0].message.content || '';
   } catch (error) {
     console.error('Error generating response:', error);
     return 'I apologize, but I am temporarily unable to respond.';
@@ -138,4 +142,3 @@ export const getGroupedPersonas = () => {
 
   return groups;
 };
-
