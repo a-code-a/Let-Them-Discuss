@@ -10,7 +10,6 @@ export const shuffle = (array) => [...array].sort(() => Math.random() - 0.5);
 
 export const generateResponse = async (figure, message) => {
   try {
-    const persona = personas[figure.id];
     const response = await anthropic.messages.create({
       model: 'claude-3-haiku-20240307',
       max_tokens: 1000,
