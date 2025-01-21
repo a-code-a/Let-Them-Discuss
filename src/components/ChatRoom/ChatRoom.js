@@ -9,6 +9,7 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
