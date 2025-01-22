@@ -5,8 +5,9 @@
   margin: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   height: calc(100vh - 255px);
-  width: 300px;
+  width: 320px;
   flex-shrink: 0;
+  min-width: 320px;
   display: flex;
   flex-direction: column;
 }
@@ -67,7 +68,6 @@
 }
 
 .topic-section button,
-.participant-controls button,
 .initial-message-section button {
   background-color: #4a90e2;
   color: white;
@@ -80,43 +80,8 @@
 }
 
 .topic-section button:hover,
-.participant-controls button:hover,
 .initial-message-section button:hover {
   background-color: #357abd;
-}
-
-.participants-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.participant {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: white;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-}
-
-.participant.speaking {
-  background-color: #e3f2fd;
-  border-color: #2196f3;
-}
-
-.participant-controls {
-  display: flex;
-  gap: 8px;
-}
-
-.participant-controls .remove-btn {
-  background-color: #dc3545;
-}
-
-.participant-controls .remove-btn:hover {
-  background-color: #c82333;
 }
 
 .initial-message-section textarea {

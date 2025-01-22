@@ -99,11 +99,12 @@
 }
 
 .figure-avatar {
-  width: 40px;
-  height: 40px;
+  width: 48px !important;
+  height: 48px !important;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #e9ecef;
+  margin-right: 12px;
 }
 
 .system-avatar {
