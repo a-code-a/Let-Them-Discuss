@@ -1,61 +1,102 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Feedback.css';
+
+const API_URL = '/.netlify/functions/feedback';
 
 const Feedback = ({ onClose }) => {
   const [feedback, setFeedback] = useState('');
   const [userName, setUserName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [feedbackList, setFeedbackList] = useState(() => {
-    const saved = localStorage.getItem('feedbackList');
-    return saved ? JSON.parse(saved).map(item => ({
-      ...item,
-      upvotes: item.upvotes || 0,
-      downvotes: item.downvotes || 0
-    })) : [];
-  });
+  const [feedbackList, setFeedbackList] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    fetchFeedback();
+  }, []);
+
+  const fetchFeedback = async () => {
+    try {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error('Failed to fetch feedback');
+      const data = await response.json();
+      setFeedbackList(data.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)));
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newFeedback = {
-      id: Date.now(),
       text: feedback,
       userName: userName.trim(),
       userEmail: userEmail.trim(),
       upvotes: 0,
-      downvotes: 0,
-      timestamp: new Date().toISOString()
+      downvotes: 0
     };
-    const updatedList = [...feedbackList, newFeedback].sort((a, b) => 
-      (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
-    setFeedbackList(updatedList);
-    localStorage.setItem('feedbackList', JSON.stringify(updatedList));
-    setFeedback('');
-    setUserName('');
-    setUserEmail('');
-  };
 
-  const handleVote = (id, isUpvote) => {
-    const updatedList = feedbackList
-      .map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            upvotes: isUpvote ? item.upvotes + 1 : item.upvotes,
-            downvotes: !isUpvote ? item.downvotes + 1 : item.downvotes
-          };
-        }
-        return item;
-      })
-      .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newFeedback)
+      });
       
-    setFeedbackList(updatedList);
-    localStorage.setItem('feedbackList', JSON.stringify(updatedList));
+      if (!response.ok) throw new Error('Failed to submit feedback');
+      
+      const updatedList = await response.json();
+      setFeedbackList(updatedList);
+      setFeedback('');
+      setUserName('');
+      setUserEmail('');
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+    }
   };
 
-  const handleDelete = (id) => {
-    const updatedList = feedbackList.filter(item => item.id !== id);
-    setFeedbackList(updatedList);
-    localStorage.setItem('feedbackList', JSON.stringify(updatedList));
+  const handleVote = async (id, isUpvote) => {
+    const itemToUpdate = feedbackList.find(item => item.id === id);
+    if (!itemToUpdate) return;
+
+    const updatedItem = {
+      ...itemToUpdate,
+      upvotes: isUpvote ? itemToUpdate.upvotes + 1 : itemToUpdate.upvotes,
+      downvotes: !isUpvote ? itemToUpdate.downvotes + 1 : itemToUpdate.downvotes
+    };
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedItem)
+      });
+
+      if (!response.ok) throw new Error('Failed to update vote');
+
+      const updatedList = await response.json();
+      setFeedbackList(updatedList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)));
+    } catch (error) {
+      console.error('Error updating vote:', error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await fetch(API_URL, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+
+      if (!response.ok) throw new Error('Failed to delete feedback');
+
+      const updatedList = await response.json();
+      setFeedbackList(updatedList);
+    } catch (error) {
+      console.error('Error deleting feedback:', error);
+    }
   };
 
   return (
@@ -101,43 +142,47 @@ const Feedback = ({ onClose }) => {
           <div className="feedback-list-section">
             <h3>Bisherige Feedbacks</h3>
             <div className="feedback-list">
-              {feedbackList.map((item) => (
-                <div key={item.id} className="feedback-item">
-                  <div className="vote-buttons">
-                    <button 
-                      onClick={() => handleVote(item.id, true)}
-                      className="vote-btn upvote"
-                      aria-label="Upvote"
-                    >
-                      👍 <span className="vote-count upvote-count">{item.upvotes}</span>
-                    </button>
-                    <button
-                      onClick={() => handleVote(item.id, false)}
-                      className="vote-btn downvote"
-                      aria-label="Downvote"
-                    >
-                      👎 <span className="vote-count downvote-count">{item.downvotes}</span>
-                    </button>
-                  </div>
-                  <div className="feedback-content-wrapper">
-                    <div className="feedback-text">{item.text}</div>
-                    <div className="feedback-user-info">
-                      <div className="feedback-user-name">{item.userName}</div>
-                      <div className="feedback-datetime">
-                        {new Date(item.timestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
-                        {new Date(item.timestamp).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+              {isLoading ? (
+                <div className="loading">Lade Feedback...</div>
+              ) : (
+                feedbackList.map((item) => (
+                  <div key={item.id} className="feedback-item">
+                    <div className="vote-buttons">
+                      <button 
+                        onClick={() => handleVote(item.id, true)}
+                        className="vote-btn upvote"
+                        aria-label="Upvote"
+                      >
+                        👍 <span className="vote-count upvote-count">{item.upvotes}</span>
+                      </button>
+                      <button
+                        onClick={() => handleVote(item.id, false)}
+                        className="vote-btn downvote"
+                        aria-label="Downvote"
+                      >
+                        👎 <span className="vote-count downvote-count">{item.downvotes}</span>
+                      </button>
+                    </div>
+                    <div className="feedback-content-wrapper">
+                      <div className="feedback-text">{item.text}</div>
+                      <div className="feedback-user-info">
+                        <div className="feedback-user-name">{item.userName}</div>
+                        <div className="feedback-datetime">
+                          {new Date(item.timestamp).toLocaleDateString('de-DE', { day: '2-digit', month: '2-digit', year: 'numeric' })} - 
+                          {new Date(item.timestamp).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })}
+                        </div>
                       </div>
                     </div>
+                    <button 
+                      onClick={() => handleDelete(item.id)}
+                      className="delete-btn"
+                      aria-label="Feedback löschen"
+                    >
+                      ×
+                    </button>
                   </div>
-                  <button 
-                    onClick={() => handleDelete(item.id)}
-                    className="delete-btn"
-                    aria-label="Feedback löschen"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
