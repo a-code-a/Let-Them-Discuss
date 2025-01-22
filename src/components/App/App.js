@@ -15,7 +15,7 @@ function App() {
   if (!isAuthenticated) {
     return <Login />;
   }
-
+//asd
   const handleAddFigure = (figure) => {
     if (!figures.some(f => f.id === figure.id)) {
       if (typeof figure.insertIndex === 'number') {
