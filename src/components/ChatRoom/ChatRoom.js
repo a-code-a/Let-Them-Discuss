@@ -45,7 +45,28 @@ const [chatHistory, setChatHistory] = useState([]);
           name: figureData.name,
           era: figureData.era
         };
-        onAddFigure(newFigure);
+        
+        // Get drop position relative to figure list
+        const container = e.currentTarget.querySelector('.figure-list');
+        const rect = container.getBoundingClientRect();
+        const dropY = e.clientY - rect.top;
+        
+        // Find insertion position
+        let insertIndex = 0;
+        const figureElements = container.querySelectorAll('.active-figure');
+        for (let i = 0; i < figureElements.length; i++) {
+          const element = figureElements[i];
+          const elementRect = element.getBoundingClientRect();
+          const elementY = elementRect.top - rect.top + elementRect.height/2;
+          
+          if (dropY < elementY) {
+            insertIndex = i;
+            break;
+          }
+          insertIndex = i + 1;
+        }
+
+        onAddFigure({...newFigure, insertIndex});
       }
     } catch (error) {
       console.error('Error parsing dropped data:', error);

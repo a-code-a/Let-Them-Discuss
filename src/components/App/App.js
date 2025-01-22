@@ -18,7 +18,15 @@ function App() {
 
   const handleAddFigure = (figure) => {
     if (!figures.some(f => f.id === figure.id)) {
-      setFigures(prev => [...prev, figure]);
+      if (typeof figure.insertIndex === 'number') {
+        setFigures(prev => [
+          ...prev.slice(0, figure.insertIndex),
+          figure,
+          ...prev.slice(figure.insertIndex)
+        ]);
+      } else {
+        setFigures(prev => [...prev, figure]);
+      }
     }
   };
 
