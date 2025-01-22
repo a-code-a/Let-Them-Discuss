@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import './HamburgerMenu.css';
 
 const HamburgerMenu = ({ onFeedbackClick }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const { logout } = useAuth();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -39,9 +41,15 @@ const HamburgerMenu = ({ onFeedbackClick }) => {
             </button>
           </li>
           <li>
-            <button className="menu-item">
-              <i className="fas fa-info-circle"></i>
-              Über uns
+            <button 
+              className="menu-item logout-button"
+              onClick={() => {
+                logout();
+                setIsOpen(false);
+              }}
+            >
+              <i className="fas fa-sign-out-alt"></i>
+              Logout
             </button>
           </li>
         </ul>
