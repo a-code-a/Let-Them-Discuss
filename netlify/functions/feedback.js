@@ -1,95 +1,71 @@
-const fs = require('fs');
-const path = require('path');
+const { MongoClient, ObjectId } = require('mongodb');
 
-const FEEDBACK_FILE = path.join(__dirname, '../../feedback.json');
+const uri = process.env.MONGODB_URI;
+const client = new MongoClient(uri);
+let cachedDb = null;
 
-// Helper function to read feedback data
-const readFeedbackData = () => {
-  try {
-    if (!fs.existsSync(FEEDBACK_FILE)) {
-      fs.writeFileSync(FEEDBACK_FILE, JSON.stringify([]));
-      return [];
-    }
-    const data = fs.readFileSync(FEEDBACK_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch (error) {
-    console.error('Error reading feedback file:', error);
-    return [];
-  }
-};
-
-// Helper function to write feedback data
-const writeFeedbackData = (data) => {
-  try {
-    fs.writeFileSync(FEEDBACK_FILE, JSON.stringify(data, null, 2));
-    return true;
-  } catch (error) {
-    console.error('Error writing feedback file:', error);
-    return false;
-  }
-};
+async function connectToDatabase() {
+  if (cachedDb) return cachedDb;
+  await client.connect();
+  cachedDb = client.db('chatwithpeople');
+  return cachedDb;
+}
 
 exports.handler = async (event, context) => {
+  context.callbackWaitsForEmptyEventLoop = false;
+  
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE'
   };
 
-  // Handle preflight requests
   if (event.httpMethod === 'OPTIONS') {
-    return {
-      statusCode: 200,
-      headers
-    };
+    return { statusCode: 200, headers };
   }
 
   try {
-    const feedbackData = readFeedbackData();
+    const db = await connectToDatabase();
+    const collection = db.collection('feedback');
 
     switch (event.httpMethod) {
       case 'GET':
+        const feedbacks = await collection.find({}).toArray();
         return {
           statusCode: 200,
           headers,
-          body: JSON.stringify(feedbackData)
+          body: JSON.stringify(feedbacks)
         };
 
       case 'POST':
         const newFeedback = JSON.parse(event.body);
-        feedbackData.push({
-          ...newFeedback,
-          id: Date.now(),
+        await collection.insertOne({
+          text: newFeedback.text,
+          userName: newFeedback.userName,
+          userEmail: newFeedback.userEmail,
+          upvotes: 0,
+          downvotes: 0,
           timestamp: new Date().toISOString()
         });
-        writeFeedbackData(feedbackData);
-        return {
-          statusCode: 201,
-          headers,
-          body: JSON.stringify(feedbackData)
-        };
+        break;
 
       case 'PUT':
         const updatedFeedback = JSON.parse(event.body);
-        const updatedData = feedbackData.map(item => 
-          item.id === updatedFeedback.id ? updatedFeedback : item
+        await collection.updateOne(
+          { _id: new ObjectId(updatedFeedback._id) },
+          { 
+            $set: {
+              upvotes: updatedFeedback.upvotes,
+              downvotes: updatedFeedback.downvotes
+            }
+          }
         );
-        writeFeedbackData(updatedData);
-        return {
-          statusCode: 200,
-          headers,
-          body: JSON.stringify(updatedData)
-        };
+        break;
 
       case 'DELETE':
         const { id } = JSON.parse(event.body);
-        const filteredData = feedbackData.filter(item => item.id !== id);
-        writeFeedbackData(filteredData);
-        return {
-          statusCode: 200,
-          headers,
-          body: JSON.stringify(filteredData)
-        };
+        await collection.deleteOne({ _id: new ObjectId(id) });
+        break;
 
       default:
         return {
@@ -98,8 +74,17 @@ exports.handler = async (event, context) => {
           body: JSON.stringify({ message: 'Method not allowed' })
         };
     }
+
+    // Return updated feedback list for all write operations
+    const updatedList = await collection.find({}).toArray();
+    return {
+      statusCode: 200,
+      headers,
+      body: JSON.stringify(updatedList)
+    };
+
   } catch (error) {
-    console.error('Error processing request:', error);
+    console.error('Error:', error);
     return {
       statusCode: 500,
       headers,
