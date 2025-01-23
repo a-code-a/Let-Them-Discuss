@@ -117,7 +117,7 @@ const Feedback = ({ onClose }) => {
                 <div className="loading">Lade Feedback...</div>
               ) : (
                 feedbackList.map((item) => (
-                  <div key={item.id} className="feedback-item">
+                  <div key={`${item.id}_${item.timestamp}`} className="feedback-item">
                     <div className="feedback-content-wrapper">
                       <div className="feedback-text">{item.text}</div>
                       <div className="feedback-user-info">
