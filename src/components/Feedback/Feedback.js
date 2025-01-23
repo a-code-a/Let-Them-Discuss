@@ -19,7 +19,7 @@ const Feedback = ({ onClose }) => {
       const response = await fetch(API_URL);
       if (!response.ok) throw new Error('Failed to fetch feedback');
       const data = await response.json();
-      setFeedbackList(data.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)));
+      setFeedbackList(data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
     } catch (error) {
       console.error('Error fetching feedback:', error);
     } finally {
@@ -32,9 +32,7 @@ const Feedback = ({ onClose }) => {
     const newFeedback = {
       text: feedback,
       userName: userName.trim(),
-      userEmail: userEmail.trim(),
-      upvotes: 0,
-      downvotes: 0
+      userEmail: userEmail.trim()
     };
 
     try {
@@ -55,33 +53,6 @@ const Feedback = ({ onClose }) => {
       console.error('Error submitting feedback:', error);
     }
   };
-
-  const handleVote = async (id, isUpvote) => {
-    const itemToUpdate = feedbackList.find(item => item.id === id);
-    if (!itemToUpdate) return;
-
-    const updatedItem = {
-      ...itemToUpdate,
-      upvotes: isUpvote ? itemToUpdate.upvotes + 1 : itemToUpdate.upvotes,
-      downvotes: !isUpvote ? itemToUpdate.downvotes + 1 : itemToUpdate.downvotes
-    };
-
-    try {
-      const response = await fetch(API_URL, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedItem)
-      });
-
-      if (!response.ok) throw new Error('Failed to update vote');
-
-      const updatedList = await response.json();
-      setFeedbackList(updatedList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)));
-    } catch (error) {
-      console.error('Error updating vote:', error);
-    }
-  };
-
   const handleDelete = async (id) => {
     try {
       const response = await fetch(API_URL, {
@@ -147,22 +118,6 @@ const Feedback = ({ onClose }) => {
               ) : (
                 feedbackList.map((item) => (
                   <div key={item.id} className="feedback-item">
-                    <div className="vote-buttons">
-                      <button 
-                        onClick={() => handleVote(item.id, true)}
-                        className="vote-btn upvote"
-                        aria-label="Upvote"
-                      >
-                        👍 <span className="vote-count upvote-count">{item.upvotes}</span>
-                      </button>
-                      <button
-                        onClick={() => handleVote(item.id, false)}
-                        className="vote-btn downvote"
-                        aria-label="Downvote"
-                      >
-                        👎 <span className="vote-count downvote-count">{item.downvotes}</span>
-                      </button>
-                    </div>
                     <div className="feedback-content-wrapper">
                       <div className="feedback-text">{item.text}</div>
                       <div className="feedback-user-info">

@@ -158,35 +158,6 @@ textarea:focus {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.vote-buttons {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.25rem;
-  padding: 0.5rem;
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #E5E7EB;
-}
-
-.vote-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem 0.5rem;
-  font-size: 1.2rem;
-  color: #6B7280;
-  transition: color 0.2s;
-}
-
-.vote-btn:hover {
-  color: #3B82F6;
-}
-
-.vote-count {
-  font-weight: 600;
-  color: #111827;
-}
 
 .feedback-content-wrapper {
   flex: 1;
