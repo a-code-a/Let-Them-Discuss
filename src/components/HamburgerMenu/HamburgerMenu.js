@@ -4,7 +4,17 @@ import './HamburgerMenu.css';
 
 const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+  const [feedbackText, setFeedbackText] = useState('');
   const { logout } = useAuth();
+
+  const handleSubmitFeedback = (e) => {
+    e.preventDefault();
+    // TODO: Implement feedback submission
+    console.log('Feedback submitted:', feedbackText);
+    setShowFeedbackDialog(false);
+    setFeedbackText('');
+  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -29,6 +39,18 @@ const HamburgerMenu = () => {
             </button>
           </li>
           <li>
+            <button
+              className="menu-item feedback-button"
+              onClick={() => {
+                setShowFeedbackDialog(true);
+                setIsOpen(false);
+              }}
+            >
+              <i className="fas fa-comment"></i>
+              Feedback
+            </button>
+          </li>
+          <li>
             <button 
               className="menu-item logout-button"
               onClick={() => {
@@ -42,6 +64,28 @@ const HamburgerMenu = () => {
           </li>
         </ul>
       </div>
+
+      {showFeedbackDialog && (
+        <div className="dialog-overlay" onClick={() => setShowFeedbackDialog(false)}>
+          <div className="feedback-dialog dialog-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Feedback senden</h3>
+            <form onSubmit={handleSubmitFeedback}>
+              <textarea
+                value={feedbackText}
+                onChange={(e) => setFeedbackText(e.target.value)}
+                placeholder="Ihr Feedback hier..."
+                required
+              />
+              <div className="dialog-buttons">
+                <button type="button" onClick={() => setShowFeedbackDialog(false)}>
+                  Abbrechen
+                </button>
+                <button type="submit">Senden</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
