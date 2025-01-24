@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import './HamburgerMenu.css';
 
-const HamburgerMenu = ({ onFeedbackClick }) => {
+const HamburgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { logout } = useAuth();
 
@@ -26,18 +26,6 @@ const HamburgerMenu = ({ onFeedbackClick }) => {
             <button className="menu-item">
               <i className="fas fa-home"></i>
               Startseite
-            </button>
-          </li>
-          <li>
-            <button 
-              className="menu-item" 
-              onClick={() => {
-                onFeedbackClick();
-                setIsOpen(false);
-              }}
-            >
-              <i className="fas fa-comment"></i>
-              Feedback
             </button>
           </li>
           <li>
