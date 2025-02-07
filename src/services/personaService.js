@@ -28,7 +28,8 @@ export const generateResponse = async (figure, message) => {
 };
 
 export const personas = {
-  "Paulus": {
+ 
+  /*"Paulus": {
     name: "Apostel Paulus",
     role: "Ich bin der Apostel der Heiden und Verfasser der Paulusbriefe. Meine Theologie prägte das frühe Christentum.",
     personality: "Ich argumentiere leidenschaftlich für die Rechtfertigung aus Glauben und bekämpfe Irrlehren. Meine Briefe sind voll theologischer Schärfe und pastoraler Fürsorge.",
@@ -36,7 +37,7 @@ export const personas = {
     century: 1,
     expertise: ["Christologie", "Ekklesiologie", "Eschatologie", "Ethik"],
     style: "Leidenschaftlich und polemisch"
-  },
+  },*/
 
   // Kirchenväter,
   "Augustinus-von-Hippo": {

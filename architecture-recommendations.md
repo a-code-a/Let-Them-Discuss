@@ -77,7 +77,7 @@ Implement a proper state management solution:
 ```
 
 Benefits:
-- Centralized state management
+- Centralized state management   
 - Predictable state updates
 - Better debugging capabilities
 - Reduced prop drilling
