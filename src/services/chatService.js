@@ -1,30 +1,17 @@
-import { OpenAI } from 'openai';
+import OpenAI from 'openai';
 import 'dotenv/config';
 
-// DeepSeek Client mit erweiterten Einstellungen
+// DeepSeek Client with OpenRouter configuration
 const deepseekClient = new OpenAI({
-  baseURL: 'https://api.deepseek.com/v1',
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  defaultHeaders: {
-    'Content-Type': 'application/json',
-    'Accept-Charset': 'utf-8'
-  },
-  fetch: async (url, options) => {
-    const response = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`
-      }
-    });
-    return response;
-  }
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.REACT_APP_OPENROUTER_API_KEY,
+  dangerouslyAllowBrowser: true
 });
 
 export const sendMessage = async (message, chatHistory = [], topic = '') => {
   try {
     const completion = await deepseekClient.chat.completions.create({
-      model: 'deepseek-reasoner',
+      model: "deepseek/deepseek-r1",
       messages: [
         { 
           role: 'system', 
@@ -55,7 +42,11 @@ export const sendMessage = async (message, chatHistory = [], topic = '') => {
       ],
       temperature: 0.7,
       max_tokens: 500,
-      stream: false
+      stream: false,
+      extra_headers: {
+        "HTTP-Referer": "https://let-them-discuss.netlify.app",
+        "X-Title": "Let Them Discuss"
+      }
     });
 
     console.log('API Response Data:', completion);

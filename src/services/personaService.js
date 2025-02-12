@@ -1,8 +1,8 @@
 import OpenAI from 'openai';
 
 const deepseek = new OpenAI({
-  apiKey: process.env.REACT_APP_DEEPSEEK_API_KEY,
-  baseURL: 'https://api.deepseek.com/v1',
+  baseURL: "https://openrouter.ai/api/v1",
+  apiKey: process.env.REACT_APP_OPENROUTER_API_KEY,
   dangerouslyAllowBrowser: true
 });
 
@@ -12,13 +12,17 @@ export const shuffle = (array) => [...array].sort(() => Math.random() - 0.5);
 export const generateResponse = async (figure, message) => {
   try {
     const response = await deepseek.chat.completions.create({
-      model: 'deepseek-reasoner',
+      model: "deepseek/deepseek-r1",
       max_tokens: 1000,
       messages: [
         { role: 'system', content: getPersonaPrompt(figure.id) },
         { role: 'user', content: message }
       ],
-      stream: false
+      stream: false,
+      extra_headers: {
+        "HTTP-Referer": "https://let-them-discuss.netlify.app",
+        "X-Title": "Let Them Discuss"
+      }
     });
     return response.choices[0].message.content || '';
   } catch (error) {
