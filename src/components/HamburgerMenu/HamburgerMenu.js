@@ -10,8 +10,27 @@ const HamburgerMenu = () => {
 
   const handleSubmitFeedback = (e) => {
     e.preventDefault();
-    // TODO: Implement feedback submission
-    console.log('Feedback submitted:', feedbackText);
+    // Implement feedback submission
+    fetch('/.netlify/functions/feedback', {
+      method: 'POST',
+      body: JSON.stringify({ text: feedbackText }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Feedback submitted successfully!');
+        alert('Feedback wurde erfolgreich gesendet!');
+      } else {
+        console.error('Failed to submit feedback.');
+        alert('Feedback konnte nicht gesendet werden.');
+      }
+    })
+    .catch(error => {
+      console.error('Error submitting feedback:', error);
+      alert('Ein Fehler ist beim Senden des Feedbacks aufgetreten.');
+    });
     setShowFeedbackDialog(false);
     setFeedbackText('');
   };

@@ -18,7 +18,11 @@ exports.handler = async (event, context) => {
       const feedbackCollection = db.collection('feedback'); // choose a collection name
 
       const data = JSON.parse(event.body);
-      await feedbackCollection.insertOne(data);
+      const feedbackDocument = {
+        text: data.text,
+        timestamp: new Date(),
+      };
+      await feedbackCollection.insertOne(feedbackDocument);
 
       return {
         statusCode: 200,
