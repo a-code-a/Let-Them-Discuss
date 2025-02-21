@@ -8,8 +8,8 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const messagesEndRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+// Chat history is maintained in messages state
 // eslint-disable-next-line no-unused-vars
-const [chatHistory, setChatHistory] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
@@ -122,10 +122,11 @@ const processDiscussionQueue = useCallback(async () => {
 
     try {
       const topicContext = topic ? `Aktuelles Diskussionsthema: ${topic}. ` : '';
-      const context = `${topicContext}Du bist ${currentFigure.name}. Bitte antworte im Kontext der laufenden Diskussion, berücksichtige die vorherigen Nachrichten und stelle kritische Fragen oder gib Denkanstöße.`;
+      const fullHistory = messages.map(m => `${m.figure.name}: ${m.text}`).join('\n');
+      const context = `${topicContext}Du bist ${currentFigure.name}. Bitte antworte im Kontext dieser gesamten Diskussion:\n\n${fullHistory}\n\nStelle kritische Fragen oder gib Denkanstöße die auf dem oben genannten Inhalt basieren.`;
       
-      const lastMessage = messages[messages.length - 1];
-      const response = await generateResponse(currentFigure, lastMessage.text + "\n\nContext: " + context);
+      const response = await generateResponse(currentFigure, context);
+      
       
       const aiMessage = {
         figure: {
@@ -170,14 +171,16 @@ const processDiscussionQueue = useCallback(async () => {
       setMessages(prev => [...prev, userMessage]);
       
       if (!isDiscussionActive) {
-        // Normaler Chat-Modus
+        // Normaler Chat-Modus mit vollständigem Verlauf
         const topicContext = topic ? `Aktuelles Diskussionsthema: ${topic}. ` : '';
-        const context = `${topicContext}Bitte antworte im Kontext der laufenden Diskussion und berücksichtige die vorherigen Nachrichten.`;
+        const fullHistory = messages.map(m => `${m.figure.name}: ${m.text}`).join('\n');
+        const context = `${topicContext}Bitte antworte im Kontext dieser gesamten Diskussion:\n\n${fullHistory}\n\n`;
         const respondingFigures = currentSpeaker ? [currentSpeaker] : figures;
         
         for (const figure of respondingFigures) {
           try {
-            const response = await generateResponse(figure, message + "\n\nContext: " + context);
+            const response = await generateResponse(figure, context + message);
+            
             const aiMessage = {
               figure: {
                 ...figure,
