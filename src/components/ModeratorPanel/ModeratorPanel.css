@@ -4,12 +4,37 @@
   padding: 20px;
   margin: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: calc(100vh - 255px);
-  width: 320px;
+  height: auto;
+  width: 100%;
+  max-width: 320px;
   flex-shrink: 0;
-  min-width: 320px;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 768px) {
+  .moderator-panel {
+    max-width: none;
+    margin: 10px;
+    padding: 15px;
+    height: auto;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+
+  .discussion-toggle {
+    padding: 15px;
+    font-size: 14px;
+  }
+
+  .topic-section input,
+  .initial-message-section textarea {
+    font-size: 16px;
+  }
+
+  .moderator-panel h3 {
+    font-size: 1.2rem;
+  }
 }
 
 .discussion-controls {
