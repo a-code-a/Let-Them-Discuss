@@ -5,11 +5,11 @@ import './ChatRoom.css';
 
 
 const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
-  const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
-// Chat history is maintained in messages state
-// eslint-disable-next-line no-unused-vars
+  // Chat history is maintained in messages state
+  // eslint-disable-next-line no-unused-vars
   const [isLoading, setIsLoading] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [currentSpeaker, setCurrentSpeaker] = useState(null);
@@ -211,15 +211,21 @@ const processDiscussionQueue = useCallback(async () => {
     }
   }, [isDiscussionActive, isProcessingQueue, discussionQueue, messages, processDiscussionQueue]);
 
+  // WhatsApp-like behavior: Keep scroll at the bottom when new messages are added
   useEffect(() => {
-    // Scrolle immer zum Ende der Nachrichten
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'nearest' 
-      });
+    if (messagesContainerRef.current) {
+      // Scroll to bottom of the messages container whenever messages change
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
+
+  // This effect runs once on component mount to set up the chat container
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      // Set initial scroll position to bottom
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, []);
 
   return (
     <div className="chat-room">
@@ -241,6 +247,18 @@ const processDiscussionQueue = useCallback(async () => {
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
+        <div className="chat-header">
+          <div className="chat-header-title">Diskussion</div>
+          <button 
+            className="refresh-button" 
+            onClick={handleRefresh}
+            title="Chat löschen"
+            disabled={messages.length === 0}
+          >
+            ↻
+          </button>
+        </div>
+
         <div className="active-figures">
           <h3>Aktive Teilnehmer:</h3>
           <div className="figure-list">
@@ -273,7 +291,7 @@ const processDiscussionQueue = useCallback(async () => {
           </div>
         )}
 
-        <div className="messages-container">
+        <div className="messages-container" ref={messagesContainerRef}>
           {messages.map((msg, index) => (
             <div key={index} className="chat-message">
               <div className="message-left">
@@ -295,7 +313,6 @@ const processDiscussionQueue = useCallback(async () => {
             </div>
           ))}
           {isLoading && <div className="loading-indicator">Generiere Antworten...</div>}
-          <div ref={messagesEndRef} />
         </div>
 
         <div className="message-input">
@@ -308,14 +325,10 @@ const processDiscussionQueue = useCallback(async () => {
             disabled={isLoading || isDiscussionActive}
           />
           <button 
-            className="refresh-button" 
-            onClick={handleRefresh}
-            title="Chat löschen"
-            disabled={messages.length === 0}
+            className="send-button"
+            onClick={handleSendMessage} 
+            disabled={isLoading || message.trim() === ''}
           >
-            ↻
-          </button>
-          <button onClick={handleSendMessage} disabled={isLoading}>
             {isLoading ? 'Sende...' : 'Senden'}
           </button>
         </div>

@@ -1,25 +1,41 @@
 .moderator-panel {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  padding: 20px;
+  background-color: white;
+  border-radius: 16px;
+  padding: 24px;
   margin: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
   height: auto;
   width: 100%;
-  max-width: 320px;
+  max-width: 350px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.moderator-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  z-index: 1;
 }
 
 @media (max-width: 768px) {
   .moderator-panel {
     max-width: none;
-    margin: 10px;
-    padding: 15px;
+    margin: 12px;
+    padding: 20px;
     height: auto;
     max-height: 80vh;
     overflow-y: auto;
+    border-radius: 12px;
   }
 
   .discussion-toggle {
@@ -33,105 +49,190 @@
   }
 
   .moderator-panel h3 {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
   }
 }
 
 .discussion-controls {
-  margin-bottom: 20px;
+  margin-bottom: 8px;
 }
 
 .discussion-toggle {
   width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #28a745;
+  padding: 14px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  background-color: #22c55e;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(34, 197, 94, 0.2);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.discussion-toggle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transition: left 0.7s ease;
 }
 
 .discussion-toggle:hover {
-  background-color: #218838;
+  background-color: #16a34a;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(34, 197, 94, 0.25);
+}
+
+.discussion-toggle:hover::after {
+  left: 100%;
 }
 
 .discussion-toggle.active {
-  background-color: #dc3545;
+  background-color: #ef4444;
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
 }
 
 .discussion-toggle.active:hover {
-  background-color: #c82333;
+  background-color: #dc2626;
+  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
 }
 
 .moderator-panel h3 {
   margin-top: 0;
-  color: #333;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 10px;
+  margin-bottom: 16px;
+  color: #1e293b;
+  padding-bottom: 12px;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+}
+
+.moderator-panel h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 3px;
 }
 
 .moderator-panel h4 {
-  color: #555;
-  margin: 15px 0 10px;
+  color: #475569;
+  margin: 10px 0 12px;
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
 .topic-section form {
   display: flex;
   gap: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .topic-section input {
   flex: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.topic-section input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  outline: none;
 }
 
 .topic-section button,
 .initial-message-section button {
-  background-color: #4a90e2;
+  background-color: #3b82f6;
   color: white;
   border: none;
-  padding: 8px 15px;
-  border-radius: 4px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .topic-section button:hover,
 .initial-message-section button:hover {
-  background-color: #357abd;
+  background-color: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
 }
 
 .initial-message-section textarea {
   width: 100%;
-  min-height: 100px;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 14px;
   resize: vertical;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  line-height: 1.5;
+}
+
+.initial-message-section textarea:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  outline: none;
 }
 
 .initial-message-section textarea:disabled,
 .topic-section input:disabled,
 button:disabled {
-  background-color: #f8f9fa;
+  background-color: #f1f5f9;
   cursor: not-allowed;
   opacity: 0.7;
+  box-shadow: none;
 }
 
 button:disabled {
-  background-color: #ccc !important;
+  background-color: #94a3b8 !important;
+  transform: none !important;
 }
 
 button:disabled:hover {
-  background-color: #ccc !important;
+  background-color: #94a3b8 !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transform: none !important;
+}
+
+.instruction-text {
+  font-size: 0.9rem;
+  color: #64748b;
+  background-color: #f8fafc;
+  padding: 14px;
+  border-radius: 8px;
+  margin-top: 8px;
+  line-height: 1.5;
+  border-left: 3px solid #60a5fa;
 }
