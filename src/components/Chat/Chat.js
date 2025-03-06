@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { generateResponse } from '../../services/personaService';
 
-const Chat = ({ figure }) => {
+const Chat = ({ figure, onStartDiscussion, onStopDiscussion }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDiscussionActive, setIsDiscussionActive] = useState(false);
+
+  const toggleDiscussion = () => {
+    if (isDiscussionActive) {
+      onStopDiscussion?.();
+    } else {
+      onStartDiscussion?.();
+    }
+    setIsDiscussionActive(!isDiscussionActive);
+  };
 
   const handleSendMessage = async () => {
     if (input.trim()) {
@@ -58,11 +68,17 @@ const Chat = ({ figure }) => {
           placeholder={`Ask ${figure.name} something...`}
           disabled={isLoading}
         />
-        <button 
+        <button
           onClick={handleSendMessage}
           disabled={isLoading || !input.trim()}
         >
           Send
+        </button>
+        <button
+          className={`discussion-toggle ${isDiscussionActive ? 'active' : ''}`}
+          onClick={toggleDiscussion}
+        >
+          {isDiscussionActive ? 'Diskussion beenden' : 'Diskussion starten'}
         </button>
       </div>
     </div>

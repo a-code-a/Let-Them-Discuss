@@ -324,12 +324,19 @@ const processDiscussionQueue = useCallback(async () => {
             placeholder={isDiscussionActive ? "Diskussion läuft automatisch..." : "Nachricht eingeben... (/thema für neues Thema)"}
             disabled={isLoading || isDiscussionActive}
           />
-          <button 
+          <button
             className="send-button"
-            onClick={handleSendMessage} 
+            onClick={handleSendMessage}
             disabled={isLoading || message.trim() === ''}
           >
             {isLoading ? 'Sende...' : 'Senden'}
+          </button>
+          <button
+            className={`discussion-toggle ${isDiscussionActive ? 'active' : ''}`}
+            onClick={isDiscussionActive ? stopDiscussion : startDiscussion}
+            disabled={figures.length < 2}
+          >
+            {isDiscussionActive ? 'Diskussion beenden' : 'Diskussion starten'}
           </button>
         </div>
       </div>
