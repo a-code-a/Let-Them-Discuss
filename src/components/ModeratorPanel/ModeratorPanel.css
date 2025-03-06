@@ -236,3 +236,45 @@ button:disabled:hover {
   line-height: 1.5;
   border-left: 3px solid #60a5fa;
 }
+
+.steps-list {
+  padding-left: 28px;
+  margin: 12px 0;
+  list-style-type: none;
+}
+
+.steps-list li {
+  margin-bottom: 14px;
+  padding: 10px 15px;
+  background-color: #f0f9ff;
+  border-radius: 8px;
+  font-weight: 500;
+  position: relative;
+  border-left: 3px solid #3b82f6;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.steps-list li:hover {
+  transform: translateX(5px);
+  background-color: #e0f2fe;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+}
+
+.steps-list li:before {
+  content: counter(list-item) "";
+  position: absolute;
+  left: -24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  background-color: #3b82f6;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+}

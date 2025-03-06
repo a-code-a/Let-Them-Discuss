@@ -12,10 +12,11 @@ const ModeratorPanel = ({
       <div className="discussion-controls">
         <div className="instruction">
           <h4>Anleitung:</h4>
-          <p>
-            Ziehe eine oder mehrere Personas per Drag & Drop in das Chatfenster, um ihnen Fragen zu stellen.<br/><br/>
-            Wenn mehrere Personas ausgewählt sind, kannst du eine Diskussion starten.
-          </p>
+          <ol className="steps-list">
+            <li>Personas per Drag & Drop in das Chatfenster ziehen</li>
+            <li>Diskussionsthema oder Frage festlegen im Chatfenster</li>
+            <li>Diskussion starten</li>
+          </ol>
         </div>
       </div>
 
