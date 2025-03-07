@@ -1,14 +1,45 @@
+:root {
+  /* Primary Colors */
+  --color-primary-50: #e8eeff;
+  --color-primary-100: #d6e3ff;
+  --color-primary-200: #b3c9ff;
+  --color-primary-300: #80a5ff;
+  --color-primary-400: #4e7bff;
+  --color-primary-500: #2b5cf1;
+  --color-primary-600: #1e45d6;
+  --color-primary-700: #1735b3;
+  --color-primary-800: #152a8f;
+  --color-primary-900: #18174b;
+  
+  /* Neutrals */
+  --color-background: #fcfdff;
+  --color-surface: #ffffff;
+  --color-border: #e6e9ef;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  
+  /* Functional */
+  --color-error: #dc3545;
+  --color-success: #28a745;
+  --color-warning: #ffc107;
+}
+
 .App {
   text-align: center;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #f9fafb;
+  background: var(--color-background);
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .App-header {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-800) 0%,
+    var(--color-primary-700) 50%,
+    var(--color-primary-600) 100%
+  );
   padding: 1.2rem;
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);

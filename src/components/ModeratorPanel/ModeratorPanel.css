@@ -1,9 +1,9 @@
 .moderator-panel {
-  background-color: white;
+  background-color: var(--color-surface);
   border-radius: 16px;
   padding: 24px;
   margin: 0px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px var(--color-primary-100);
   height: auto;
   width: 100%;
   max-width: 350px;
@@ -11,7 +11,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
   position: relative;
   overflow: hidden;
 }
@@ -23,7 +23,7 @@
   left: 0;
   right: 0;
   height: 5px;
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-300));
   z-index: 1;
 }
 
@@ -62,7 +62,7 @@
   padding: 14px 18px;
   font-size: 15px;
   font-weight: 600;
-  background-color: #22c55e;
+  background-color: var(--color-success);
   color: white;
   border: none;
   border-radius: 10px;
@@ -92,7 +92,7 @@
 }
 
 .discussion-toggle:hover {
-  background-color: #16a34a;
+  background-color: var(--color-success);
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(34, 197, 94, 0.25);
 }
@@ -102,19 +102,19 @@
 }
 
 .discussion-toggle.active {
-  background-color: #ef4444;
+  background-color: var(--color-error);
   box-shadow: 0 4px 6px rgba(239, 68, 68, 0.2);
 }
 
 .discussion-toggle.active:hover {
-  background-color: #dc2626;
+  background-color: var(--color-error);
   box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
 }
 
 .moderator-panel h3 {
   margin-top: 0;
   margin-bottom: 16px;
-  color: #1e293b;
+  color: var(--color-text);
   padding-bottom: 12px;
   font-weight: 600;
   text-align: center;
@@ -129,12 +129,12 @@
   transform: translateX(-50%);
   width: 60px;
   height: 3px;
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  background: linear-gradient(90deg, var(--color-primary-500), var(--color-primary-300));
   border-radius: 3px;
 }
 
 .moderator-panel h4 {
-  color: #475569;
+  color: var(--color-text-muted);
   margin: 10px 0 12px;
   font-size: 1.05rem;
   font-weight: 600;
@@ -149,7 +149,7 @@
 .topic-section input {
   flex: 1;
   padding: 12px 14px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s ease;
@@ -157,14 +157,14 @@
 }
 
 .topic-section input:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  border-color: var(--color-primary-300);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
   outline: none;
 }
 
 .topic-section button,
 .initial-message-section button {
-  background-color: #3b82f6;
+  background-color: var(--color-primary-500);
   color: white;
   border: none;
   padding: 10px 16px;
@@ -173,7 +173,7 @@
   font-size: 14px;
   font-weight: 500;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 4px var(--color-primary-200);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -181,16 +181,16 @@
 
 .topic-section button:hover,
 .initial-message-section button:hover {
-  background-color: #2563eb;
+  background-color: var(--color-primary-700);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 8px var(--color-primary-300);
 }
 
 .initial-message-section textarea {
   width: 100%;
   min-height: 120px;
   padding: 14px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   font-size: 14px;
   resize: vertical;
@@ -201,40 +201,40 @@
 }
 
 .initial-message-section textarea:focus {
-  border-color: #60a5fa;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+  border-color: var(--color-primary-300);
+  box-shadow: 0 0 0 3px var(--color-primary-100);
   outline: none;
 }
 
 .initial-message-section textarea:disabled,
 .topic-section input:disabled,
 button:disabled {
-  background-color: #f1f5f9;
+  background-color: var(--color-background);
   cursor: not-allowed;
   opacity: 0.7;
   box-shadow: none;
 }
 
 button:disabled {
-  background-color: #94a3b8 !important;
+  background-color: var(--color-border) !important;
   transform: none !important;
 }
 
 button:disabled:hover {
-  background-color: #94a3b8 !important;
+  background-color: var(--color-border) !important;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
   transform: none !important;
 }
 
 .instruction-text {
   font-size: 0.9rem;
-  color: #64748b;
-  background-color: #f8fafc;
+  color: var(--color-text-muted);
+  background-color: var(--color-background);
   padding: 14px;
   border-radius: 8px;
   margin-top: 8px;
   line-height: 1.5;
-  border-left: 3px solid #60a5fa;
+  border-left: 3px solid var(--color-primary-300);
 }
 
 .steps-list {
@@ -246,18 +246,18 @@ button:disabled:hover {
 .steps-list li {
   margin-bottom: 14px;
   padding: 10px 15px;
-  background-color: #f0f9ff;
+  background-color: var(--color-primary-50);
   border-radius: 8px;
   font-weight: 500;
   position: relative;
-  border-left: 3px solid #3b82f6;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-left: 3px solid var(--color-primary-500);
+  box-shadow: 0 2px 4px var(--color-border);
   transition: all 0.3s ease;
 }
 
 .steps-list li:hover {
   transform: translateX(5px);
-  background-color: #e0f2fe;
+  background-color: var(--color-primary-100);
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
@@ -269,12 +269,12 @@ button:disabled:hover {
   transform: translateY(-50%);
   width: 28px;
   height: 28px;
-  background-color: #3b82f6;
+  background-color: var(--color-primary-500);
   color: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 2px 4px var(--color-primary-200);
 }
