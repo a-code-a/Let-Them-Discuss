@@ -35,7 +35,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <HamburgerMenu />
-        <h1>Let Them Discuss</h1>
+        <h1>Theologen Taverne</h1>
       </header>
       <div className="chat-container">
         <FigureSelection 
