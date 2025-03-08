@@ -28,7 +28,7 @@
 
 .figure-selection h2::after {
   content: '';
-  position: absolute;
+  position: middle;
   left: 0;
   bottom: 0;
   width: 50px;
