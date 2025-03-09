@@ -37,19 +37,53 @@
   min-height: 100vh;
   font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   position: relative;
+  padding-top: 70px; /* Add padding to prevent overlap */
 }
 
 .App-header {
   background: transparent;
-  padding: 1.2rem;
+  padding: 0.8rem 1rem;
   color: white;
-  position: sticky;
+  position: absolute;
+  box-sizing: border-box;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between; /* Distribute items evenly */
   min-height: 70px;
+  padding: 0 1rem; /* Add horizontal padding */
+}
+
+.App-header h1 {
+  flex-grow: 1; /* Allow title to take remaining space */
+  text-align: center; /* Center the title text */
+}
+
+.App-header nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  gap: 5px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  margin-right: 5px;
+  padding-right: 5px;
+  overflow: hidden;
+}
+
+.App-header nav a {
+  text-decoration: none;
+  color: white;
+  font-weight: bold;
+  transition: color 0.3s ease;
+  font-size: 0.9rem; /* Reduce font size */
+}
+
+.App-header nav a:hover {
+  color: #FFD700;
 }
 
 .App-header h1 {
@@ -124,4 +158,30 @@
   border-radius: 4px;
   margin: 10px 0;
   border: 1px solid #f5c6cb;
+}
+
+footer {
+  background: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+footer nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+footer nav a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+footer nav a:hover {
+  color: #FFD700;
 }

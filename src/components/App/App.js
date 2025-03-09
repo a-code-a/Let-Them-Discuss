@@ -36,18 +36,34 @@ function App() {
       <header className="App-header">
         <HamburgerMenu />
         <h1>Theologen Taverne</h1>
+        <nav>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
       </header>
       <div className="chat-container">
-        <FigureSelection 
+        <FigureSelection
           onSelectFigure={handleAddFigure}
           selectedFigures={figures}
         />
-        <ChatRoom 
+        <ChatRoom
           figures={figures}
           onRemoveFigure={handleRemoveFigure}
           onAddFigure={handleAddFigure}
         />
       </div>
+      <footer>
+        <p>&copy; 2025 Theologen Taverne. All rights reserved.</p>
+        <nav>
+          <ul>
+            <li><a href="/terms">Terms of Service</a></li>
+            <li><a href="/privacy">Privacy Policy</a></li>
+          </ul>
+        </nav>
+      </footer>
     </div>
   );
 }
