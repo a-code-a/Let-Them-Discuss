@@ -41,7 +41,7 @@
 }
 
 .App-header {
-  background: transparent;
+  background: rgba(33, 37, 41, 0.7); /* Dark background with transparency */
   padding: 0.8rem 1rem;
   color: white;
   position: absolute;
@@ -55,6 +55,7 @@
   justify-content: space-between; /* Distribute items evenly */
   min-height: 70px;
   padding: 0 1rem; /* Add horizontal padding */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
 }
 
 .App-header h1 {
@@ -68,7 +69,8 @@
   display: flex;
   gap: 5px;
   flex-wrap: nowrap;
-  justify-content: flex-end;
+  justify-content: flex-end; /* Align items to the right */
+  margin-left: auto; /* Push nav to the right */
   margin-right: 5px;
   padding-right: 5px;
   overflow: hidden;
@@ -76,14 +78,14 @@
 
 .App-header nav a {
   text-decoration: none;
-  color: white;
+  color: #d3d3d3; /* Light grey */
   font-weight: bold;
   transition: color 0.3s ease;
-  font-size: 0.9rem; /* Reduce font size */
+  font-size: 1.1rem; /* Increased font size */
 }
 
 .App-header nav a:hover {
-  color: #FFD700;
+  color: #FFFF33; /* Brighter yellow */
 }
 
 .App-header h1 {
@@ -103,9 +105,9 @@
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 50px;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.7);
+  width: 70px; /* Increased width */
+  height: 4px; /* Increased height */
+  background: #FFFF33; /* Brighter yellow */
   border-radius: 3px;
 }
 
