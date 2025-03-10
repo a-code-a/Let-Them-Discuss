@@ -226,14 +226,14 @@ button:disabled:hover {
 }
 
 .instruction-text {
-  font-size: 0.9rem;
+  font-size: 1rem; /* Increased font size */
   color: var(--color-text-muted);
   background-color: var(--color-background);
   padding: 14px;
   border-radius: 8px;
   margin-top: 8px;
   line-height: 1.5;
-  border-left: 3px solid var(--color-primary-300);
+  border-left: 5px solid var(--color-primary-500); /* More noticeable border */
 }
 
 .steps-list {
@@ -245,12 +245,12 @@ button:disabled:hover {
 .steps-list li {
   margin-bottom: 14px;
   padding: 10px 15px;
-  background-color: var(--color-primary-50);
+  background-color: var(--color-primary-100); /* Lighter background */
   border-radius: 8px;
   font-weight: 500;
   position: relative;
   border-left: 3px solid var(--color-primary-500);
-  box-shadow: 0 2px 4px var(--color-border);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Slightly stronger shadow */
   transition: all 0.3s ease;
 }
 

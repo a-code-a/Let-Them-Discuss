@@ -13,9 +13,9 @@ const ModeratorPanel = ({
         <div className="instruction">
           <h4>Anleitung:</h4>
           <ol className="steps-list">
-            <li>Personas per Drag & Drop in das Chatfenster ziehen</li>
-            <li>Diskussionsthema oder Frage festlegen im Chatfenster</li>
-            <li>Diskussion starten</li>
+            <li>Ziehe Gesprächsteilnehmer per Drag & Drop in den Chat</li>
+            <li>Lege ein Diskussionsthema oder eine Frage im Chat fest</li>
+            <li>Starte die Diskussion</li>
           </ol>
         </div>
       </div>

@@ -12,11 +12,11 @@
   --color-primary-900: #18174b;
   
   /* Neutrals */
-  --color-background: #fcfdff;
+  --color-background: #f8f9fa;
   --color-surface: #ffffff;
   --color-border: #e6e9ef;
-  --color-text: #1e293b;
-  --color-text-muted: #64748b;
+  --color-text: #212529;
+  --color-text-muted: #495057;
   
   /* Functional */
   --color-error: #dc3545;
@@ -89,7 +89,7 @@
 .App-header h1 {
   margin: 0 auto;
   font-size: 3rem;
-  font-family: 'Italianno', cursive;
+  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-weight: 400;
   letter-spacing: 1.5px;
   color: #FFD700;
