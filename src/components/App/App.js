@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Login from '../Login/Login';
-import FigureSelection from '../FigureSelection/FigureSelection';
 import ChatRoom from '../ChatRoom/ChatRoom';
 import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
 import '../../styles/App.css';
@@ -45,10 +44,6 @@ function App() {
         </nav>
       </header>
       <div className="chat-container">
-        <FigureSelection
-          onSelectFigure={handleAddFigure}
-          selectedFigures={figures}
-        />
         <ChatRoom
           figures={figures}
           onRemoveFigure={handleRemoveFigure}

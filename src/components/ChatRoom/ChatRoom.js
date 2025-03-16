@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { generateResponse, shuffle } from '../../services/personaService';
 import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
+import FigureSelection from '../FigureSelection/FigureSelection';
 import './ChatRoom.css';
 
 
@@ -229,6 +230,10 @@ const processDiscussionQueue = useCallback(async () => {
 
   return (
     <div className="chat-room">
+      <FigureSelection
+        onSelectFigure={onAddFigure}
+        selectedFigures={figures}
+      />
       <ModeratorPanel
         selectedFigures={figures}
         onSetTopic={handleSetTopic}
