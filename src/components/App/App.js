@@ -1,13 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import Login from '../Login/Login';
 import ChatRoom from '../ChatRoom/ChatRoom';
 import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
 import '../../styles/App.css';
 
+const counterStyle = {
+  backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white
+  padding: '10px 20px',
+  borderRadius: '20px',
+  textAlign: 'center',
+  marginTop: '20px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Add a subtle shadow
+  fontFamily: 'Arial, sans-serif',
+};
+
+const countStyle = {
+  fontSize: '28px',
+  fontWeight: 'bold',
+  color: '#e44d26', // A warm, inviting color
+  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)', // Add a text shadow for depth
+};
+
 function App() {
   const { isAuthenticated } = useAuth();
   const [figures, setFigures] = useState([]);
+  const [visitorCount, setVisitorCount] = useState(0);
+
+  useEffect(() => {
+    const incrementVisitorCount = async () => {
+      try {
+        const response = await fetch('/.netlify/functions/incrementVisitorCount');
+        const data = await response.json();
+        setVisitorCount(data.count);
+      } catch (error) {
+        console.error('Error fetching visitor count:', error);
+      }
+    };
+
+    incrementVisitorCount();
+  }, []);
 
   if (!isAuthenticated) {
     return <Login />;
@@ -43,6 +75,10 @@ function App() {
           </ul>
         </nav>
       </header>
+      <div style={counterStyle}>
+        <p>Besucher:</p>
+        <p style={countStyle}>{visitorCount}</p>
+      </div>
       <div className="chat-container">
         <ChatRoom
           figures={figures}
