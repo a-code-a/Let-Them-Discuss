@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { generateResponse, shuffle } from '../../services/personaService';
-import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
 import FigureSelection from '../FigureSelection/FigureSelection';
 import './ChatRoom.css';
 
 
-const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
+const ChatRoom = ({ figures, onAddFigure }) => {
   const messagesContainerRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -77,24 +76,11 @@ const ChatRoom = ({ figures, onRemoveFigure, onAddFigure }) => {
   const handleSetTopic = (newTopic) => {
     setTopic(newTopic);
     const systemMessage = {
-      figure: { 
+      figure: {
         name: 'System',
         image: '/images/system-icon.svg'
       },
       text: `Neues Diskussionsthema: ${newTopic}`,
-      timestamp: new Date().toISOString()
-    };
-    setMessages(prev => [...prev, systemMessage]);
-  };
-
-  const handleSelectSpeaker = (figure) => {
-    setCurrentSpeaker(figure);
-    const systemMessage = {
-      figure: { 
-        name: 'System',
-        image: '/images/system-icon.svg'
-      },
-      text: `${figure.name} hat das Wort erhalten.`,
       timestamp: new Date().toISOString()
     };
     setMessages(prev => [...prev, systemMessage]);
@@ -234,18 +220,6 @@ const processDiscussionQueue = useCallback(async () => {
         onSelectFigure={onAddFigure}
         selectedFigures={figures}
       />
-      <ModeratorPanel
-        selectedFigures={figures}
-        onSetTopic={handleSetTopic}
-        onSelectSpeaker={handleSelectSpeaker}
-        onRemoveParticipant={onRemoveFigure}
-        currentSpeaker={currentSpeaker}
-        topic={topic}
-        isDiscussionActive={isDiscussionActive}
-        onStartDiscussion={startDiscussion}
-        onStopDiscussion={stopDiscussion}
-      />
-      
       <div
         className={`chat-window ${isDraggingOver ? 'dragging-over' : ''}`}
         onDragOver={handleDragOver}
@@ -278,9 +252,8 @@ const processDiscussionQueue = useCallback(async () => {
                   className="figure-avatar"
                 />
                 <span>{figure.name}</span>
-                <button 
+                <button
                   className="remove-figure"
-                  onClick={() => onRemoveFigure(figure.id)}
                   title="Entfernen"
                 >
                   ×
