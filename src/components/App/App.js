@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { ChatProvider } from '../../context/ChatContext';
 import Login from '../Login/Login';
 import ChatRoom from '../ChatRoom/ChatRoom';
+import ChatSidebar from '../ChatSidebar/ChatSidebar';
 import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
 import '../../styles/App.css';
 
@@ -46,40 +48,46 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <HamburgerMenu />
-        <h1>Theologen Taverne</h1>
-        <nav>
-          <ul>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#faq">FAQ</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </nav>
-        <div className="visitor-counter">
-          <p className="visitor-label">Besucher:</p>
-          <p className="visitor-count">{visitorCount}</p>
+    <ChatProvider>
+      <div className="App">
+        <header className="App-header">
+          <HamburgerMenu />
+          <h1>Theologen Taverne</h1>
+          <nav>
+            <ul>
+              <li><a href="#features">Features</a></li>
+              <li><a href="#faq">FAQ</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </nav>
+          <div className="visitor-counter">
+            <p className="visitor-label">Besucher:</p>
+            <p className="visitor-count">{visitorCount}</p>
+          </div>
+        </header>
+        
+        <div className="main-content">
+          <ChatSidebar />
+          <div className="chat-container">
+            <ChatRoom
+              figures={figures}
+              onRemoveFigure={handleRemoveFigure}
+              onAddFigure={handleAddFigure}
+            />
+          </div>
         </div>
-      </header>
-      
-      <div className="chat-container">
-        <ChatRoom
-          figures={figures}
-          onRemoveFigure={handleRemoveFigure}
-          onAddFigure={handleAddFigure}
-        />
+        
+        <footer>
+          <p>&copy; 2025 Theologen Taverne. All rights reserved.</p>
+          <nav>
+            <ul>
+              <li><a href="/terms">Terms of Service</a></li>
+              <li><a href="/privacy">Privacy Policy</a></li>
+            </ul>
+          </nav>
+        </footer>
       </div>
-      <footer>
-        <p>&copy; 2025 Theologen Taverne. All rights reserved.</p>
-        <nav>
-          <ul>
-            <li><a href="/terms">Terms of Service</a></li>
-            <li><a href="/privacy">Privacy Policy</a></li>
-          </ul>
-        </nav>
-      </footer>
-    </div>
+    </ChatProvider>
   );
 }
 

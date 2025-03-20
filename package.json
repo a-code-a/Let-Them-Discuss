@@ -9,13 +9,16 @@
     "@testing-library/user-event": "^13.5.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "express-validator": "^7.2.1",
     "historische-figuren-chat": "file:",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.15.0",
     "mongoose": "^8.9.5",
     "openai": "^4.20.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "^5.0.1",
+    "serverless-http": "^3.2.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -24,7 +27,9 @@
     "predeploy": "npm run build",
     "deploy": "netlify deploy --prod",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "server": "node server/src/server.js",
+    "dev": "concurrently \"npm run start\" \"npm run server\""
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +51,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.1",
     "netlify-cli": "^18.0.1"
