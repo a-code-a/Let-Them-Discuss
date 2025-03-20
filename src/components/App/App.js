@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import Login from '../Login/Login';
 import ChatRoom from '../ChatRoom/ChatRoom';
 import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
-import ModeratorPanel from '../ModeratorPanel/ModeratorPanel';
 import '../../styles/App.css';
 
 function App() {
@@ -58,22 +57,12 @@ function App() {
             <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
+        <div className="visitor-counter">
+          <p className="visitor-label">Besucher:</p>
+          <p className="visitor-count">{visitorCount}</p>
+        </div>
       </header>
-      <ModeratorPanel
-        selectedFigures={figures}
-        onSetTopic={() => {}}
-        onSelectSpeaker={() => {}}
-        onRemoveParticipant={handleRemoveFigure}
-        currentSpeaker={null}
-        topic={''}
-        isDiscussionActive={false}
-        onStartDiscussion={() => {}}
-        onStopDiscussion={() => {}}
-      />
-      <div className="visitor-counter">
-        <p className="visitor-label">Besucher:</p>
-        <p className="visitor-count">{visitorCount}</p>
-      </div>
+      
       <div className="chat-container">
         <ChatRoom
           figures={figures}

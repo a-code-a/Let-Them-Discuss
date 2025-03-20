@@ -189,21 +189,25 @@ footer nav a:hover {
 }
 
 .visitor-counter {
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white */
-  padding: 10px 20px;
-  border-radius: 20px;
-  text-align: left; /* Left align the text */
-  margin-top: 20px;
-  margin-left: 20px; /* Add a left margin */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  background-color: transparent; /* Make background transparent for header */
+  padding: 0; /* Remove padding */
+  border-radius: 0; /* Remove border-radius */
+  text-align: center; /* Center align text in header */
+  margin-top: 0; /* Remove top margin */
+  margin-left: 10px; /* Add a left margin for spacing */
+  box-shadow: none; /* Remove shadow */
   font-family: 'Arial, sans-serif';
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effect */
-  width: fit-content; /* Adjust width to content */
+  transition: none; /* Remove transitions */
+  width: auto; /* Adjust width to content */
+  display: flex; /* Use flexbox for alignment */
+  flex-direction: column; /* Stack label and count vertically */
+  align-items: center; /* Center items horizontally */
+  justify-content: center; /* Center items vertically */
 }
 
 .visitor-counter:hover {
-  transform: translateY(-3px); /* Slight lift on hover */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+  transform: none; /* Remove hover transform */
+  box-shadow: none; /* Remove hover shadow */
 }
 
 .visitor-counter p {
@@ -211,14 +215,29 @@ footer nav a:hover {
 }
 
 .visitor-label {
-  font-size: 1rem;
-  color: #555; /* A dark grey for the label */
-  margin-bottom: 3px;
+  font-size: 0.8rem; /* Smaller font size for label */
+  color: #d3d3d3; /* Light grey color for label */
+  margin-bottom: 2px; /* Reduce margin bottom */
 }
 
 .visitor-count {
-  font-size: 24px;
+  font-size: 1.5rem; /* Smaller font size for count */
   font-weight: bold;
-  color: #e44d26; /* A warm, inviting color */
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Add a text shadow for depth */
+  color: #FFFF33; /* Yellow color for count */
+  text-shadow: none; /* Remove text shadow */
+}
+
+.App-header {
+  justify-content: space-between; /* Keep space-between for header items */
+}
+
+.App-header nav,
+.App-header .visitor-counter {
+  margin-left: 10px; /* Add some left margin to nav and visitor counter */
+  margin-right: 10px; /* Add some right margin to nav and visitor counter */
+}
+
+.App-header h1 {
+  flex-grow: 1; /* Let h1 take up remaining space */
+  text-align: center; /* Center the title */
 }
