@@ -4,7 +4,7 @@ import FigureSelection from '../FigureSelection/FigureSelection';
 import './ChatRoom.css';
 
 
-const ChatRoom = ({ figures, onAddFigure }) => {
+const ChatRoom = ({ figures, onAddFigure, onRemoveFigure }) => {
   const messagesContainerRef = useRef(null);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
@@ -255,6 +255,7 @@ const processDiscussionQueue = useCallback(async () => {
                 <button
                   className="remove-figure"
                   title="Entfernen"
+                  onClick={() => onRemoveFigure(figure.id)}
                 >
                   ×
                 </button>
