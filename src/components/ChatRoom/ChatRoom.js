@@ -70,7 +70,7 @@ const ChatRoom = ({ figures, onAddFigure, onRemoveFigure }) => {
     e.preventDefault();
    setIsDraggingOver(false);
    try {
-     const figureData = JSON.parse(e.dataTransfer.getData('application/json') || e.dataTransfer.getData('text'));
+     const figureData = JSON.parse(e.target.dragData);
      if (figureData && figureData.id && !figures.some(f => f.id === figureData.id)) {
        const newFigure = {
           id: figureData.id,
