@@ -1,12 +1,12 @@
 {
   "files": {
     "main.css": "/static/css/main.de843319.css",
-    "main.js": "/static/js/main.d3fd8019.js",
+    "main.js": "/static/js/main.55109a75.js",
     "static/media/Background.png": "/static/media/Background.f78dbb56872299b6c181.png",
     "index.html": "/index.html"
   },
   "entrypoints": [
     "static/css/main.de843319.css",
-    "static/js/main.d3fd8019.js"
+    "static/js/main.55109a75.js"
   ]
 }
