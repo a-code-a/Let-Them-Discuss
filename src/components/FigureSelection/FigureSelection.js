@@ -44,6 +44,17 @@ const FigureSelection = ({ onSelectFigure }) => {
                     onDragEnd={(e) => {
                       e.target.classList.remove('dragging');
                     }}
+                    onTouchStart={(e) => {
+                      e.dataTransfer = { setData: (mimeType, data) => { e.target.dragData = data; } };
+                      e.dataTransfer.setData('application/json', JSON.stringify(figure));
+                      e.target.classList.add('dragging');
+                    }}
+                    onTouchMove={(e) => {
+                      // Implement touch move if needed
+                    }}
+                    onTouchEnd={(e) => {
+                      e.target.classList.remove('dragging');
+                    }}
                   >
                     <img
                       src={`/images/${figure.id}.jpg`}
