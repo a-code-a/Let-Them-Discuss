@@ -16,7 +16,7 @@ const FigureSelection = ({ onSelectFigure }) => {
       <h2>Theologen</h2>
       <div className="eras-container">
         {Object.entries(groupedPersonas).map(([era, figures]) => (
-          <div 
+          <div
             key={era} 
             className={`era-group ${expandedEra === era ? 'expanded' : ''}`}
           >
@@ -45,7 +45,7 @@ const FigureSelection = ({ onSelectFigure }) => {
                       e.target.classList.remove('dragging');
                     }}
                     onTouchStart={(e) => {
-                      e.dataTransfer = { setData: (mimeType, data) => { e.target.dragData = data; } };
+                      e.dataTransfer = { setData: (mimeType, data) => { e.dataTransferData = data; } };
                       e.dataTransfer.setData('application/json', JSON.stringify(figure));
                       e.target.classList.add('dragging');
                     }}

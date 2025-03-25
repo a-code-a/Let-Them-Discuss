@@ -98,7 +98,7 @@ const ChatRoom = ({ figures, onAddFigure, onRemoveFigure }) => {
           insertIndex = i + 1;
         }
 
-        onAddFigure({...newFigure, insertIndex});
+        onAddFigure(newFigure, insertIndex);
       }
     } catch (error) {
       console.error('Error parsing dropped data:', error);
