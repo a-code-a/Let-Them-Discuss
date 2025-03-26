@@ -41,9 +41,8 @@
 }
 
 .App-header {
-  background: rgba(33, 37, 41, 0.7); /* Dark background with transparency */
+  background: white; /* White background */
   padding: 0.8rem 1rem;
-  color: white;
   position: absolute;
   box-sizing: border-box;
   top: 0;
@@ -51,11 +50,12 @@
   width: 100%;
   z-index: 100;
   display: flex;
-  align-items: center;
+  align-items: center; /* Vertically center items */
   justify-content: space-between; /* Distribute items evenly */
-  min-height: 70px;
+  min-height: 60px;
   padding: 0 1rem; /* Add horizontal padding */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  border-bottom: 1px solid #e6e9ef; /* Add a subtle border */
 }
 
 .App-header h1 {
@@ -78,38 +78,29 @@
 
 .App-header nav a {
   text-decoration: none;
-  color: #d3d3d3; /* Light grey */
+  color: #603813; /* Dark Brown */
   font-weight: bold;
   transition: color 0.3s ease;
-  font-size: 1.1rem; /* Increased font size */
+  font-size: 1rem; /* Increased font size */
+  text-transform: uppercase;
 }
 
 .App-header nav a:hover {
-  color: #FFFF33; /* Brighter yellow */
+  color: #C6A969; /* Light Beige */
+  text-decoration: underline;
 }
 
 .App-header h1 {
   margin: 0 auto;
-  font-size: 3rem;
-  font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 2.5rem;
+  font-family: 'Georgia', serif;
   font-weight: 400;
   letter-spacing: 1.5px;
   color: #FFD700;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
   position: relative;
 }
 
-.App-header h1::after {
-  content: '';
-  position: absolute;
-  bottom: -8px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70px; /* Increased width */
-  height: 4px; /* Increased height */
-  background: #FFFF33; /* Brighter yellow */
-  border-radius: 3px;
-}
 
 .main-content {
   display: flex;
@@ -204,9 +195,9 @@ footer nav a:hover {
 }
 
 .visitor-counter {
-  background-color: transparent; /* Make background transparent for header */
-  padding: 0; /* Remove padding */
-  border-radius: 0; /* Remove border-radius */
+  background-color: rgba(0, 0, 0, 0.1); /* Add a subtle background color */
+  padding: 5px 10px; /* Add padding */
+  border-radius: 20px; /* Add border-radius */
   text-align: center; /* Center align text in header */
   margin-top: 0; /* Remove top margin */
   margin-left: 10px; /* Add a left margin for spacing */
@@ -231,28 +222,42 @@ footer nav a:hover {
 
 .visitor-label {
   font-size: 0.8rem; /* Smaller font size for label */
-  color: #d3d3d3; /* Light grey color for label */
+  color: #603813; /* Dark Brown */
   margin-bottom: 2px; /* Reduce margin bottom */
 }
 
 .visitor-count {
-  font-size: 1.5rem; /* Smaller font size for count */
+  font-size: 0.9rem; /* Smaller font size for count */
   font-weight: bold;
-  color: #FFFF33; /* Yellow color for count */
+  color: #603813; /* Dark Brown */
   text-shadow: none; /* Remove text shadow */
+  display: flex;
+  align-items: center;
+}
+
+.visitor-count i {
+  margin-right: 5px;
+  color: #603813;
 }
 
 .App-header {
   justify-content: space-between; /* Keep space-between for header items */
 }
-
 .App-header nav,
 .App-header .visitor-counter {
-  margin-left: 10px; /* Add some left margin to nav and visitor counter */
-  margin-right: 10px; /* Add some right margin to nav and visitor counter */
+  margin-left: 20px; /* Add some left margin to nav and visitor counter */
+  margin-right: 20px; /* Add some right margin to nav and visitor counter */
 }
 
 .App-header h1 {
   flex-grow: 1; /* Let h1 take up remaining space */
   text-align: center; /* Center the title */
+}
+
+.logo-theologen {
+  color: #603813; /* Dark Brown */
+}
+
+.logo-taverne {
+  color: #C6A969; /* Light Beige */
 }

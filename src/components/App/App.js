@@ -52,7 +52,7 @@ function App() {
       <div className="App">
         <header className="App-header">
           <HamburgerMenu />
-          <h1>Theologen Taverne</h1>
+          <h1><span className="logo-theologen">Theologen</span> <span className="logo-taverne">Taverne</span></h1>
           <nav>
             <ul>
               <li><a href="#features">Features</a></li>
@@ -62,7 +62,7 @@ function App() {
           </nav>
           <div className="visitor-counter">
             <p className="visitor-label">Besucher:</p>
-            <p className="visitor-count">{visitorCount}</p>
+            <p className="visitor-count"><i className="fas fa-user"></i> {visitorCount}</p>
           </div>
         </header>
         
