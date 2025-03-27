@@ -77,9 +77,41 @@ const ChatSidebar = () => {
             <p>Lädt Gespräche...</p>
           </div>
         ) : error ? (
-          <div className="empty-state">
-            <p>Fehler beim Laden der Gespräche</p>
-            <button onClick={fetchChats}>Erneut versuchen</button>
+          <div className="empty-state error-state">
+            <p className="error-title">Fehler beim Laden der Gespräche:</p>
+            <p className="error-message">{error}</p>
+            <div className="error-actions">
+              <button
+                className="retry-button"
+                onClick={fetchChats}
+              >
+                Erneut versuchen
+              </button>
+              <button
+                className="debug-button"
+                onClick={async () => {
+                  try {
+                    const response = await fetch('/api/status');
+                    if (response.ok) {
+                      const status = await response.json();
+                      alert(
+                        `API Status:\n` +
+                        `MongoDB: ${status.mongodb ? 'Verbunden' : 'Nicht verbunden'}\n` +
+                        `MongoDB-Status: ${status.mongodb_state}\n` +
+                        `MongoDB-URI konfiguriert: ${status.env.has_mongodb_uri ? 'Ja' : 'Nein'}\n` +
+                        `Umgebung: ${status.env.node_env || 'Nicht definiert'}`
+                      );
+                    } else {
+                      alert('Status-Endpunkt nicht erreichbar: ' + response.status);
+                    }
+                  } catch (e) {
+                    alert('Fehler beim Status-Check: ' + e.message);
+                  }
+                }}
+              >
+                Verbindungsstatus prüfen
+              </button>
+            </div>
           </div>
         ) : chats.length === 0 ? (
           <div className="empty-state">

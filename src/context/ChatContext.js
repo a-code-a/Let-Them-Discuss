@@ -16,16 +16,117 @@ export const ChatProvider = ({ children }) => {
   // API-Endpunkt Basis-URL
   const API_BASE_URL = '/api';
 
+  // Sleep/Delay Funktion für Retries
+  const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
   // Alle Chats laden
-  const fetchChats = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const fetchChats = useCallback(async (retryCount = 0, maxRetries = 3) => {
+    if (retryCount === 0) {
+      setLoading(true);
+      setError(null);
+    }
 
     try {
+      // First check MongoDB connection status
+      let dbStatus = null;
+      try {
+        const statusResponse = await fetch(`${API_BASE_URL}/status`);
+        if (statusResponse.ok) {
+          dbStatus = await statusResponse.json();
+          if (dbStatus.mongodb_state !== 1) {
+            console.log(`Datenbank nicht verbunden, Status: ${dbStatus.mongodb_state} (${dbStatus.mongodb || 'unbekannt'})`);
+          }
+        }
+      } catch (statusErr) {
+        console.warn('Status check failed, proceeding anyway:', statusErr);
+        // Continue with main request even if status check fails
+      }
+
       const response = await fetch(`${API_BASE_URL}/chats`);
       
+      // Check if we got HTML instead of JSON (common error when Netlify returns an error page)
+      const contentType = response.headers.get('content-type');
+      if (contentType && contentType.includes('text/html')) {
+        throw new Error('Erhielt HTML statt JSON. Der Server hat möglicherweise ein Problem.');
+      }
+      
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        // Handle 503 Service Unavailable (likely MongoDB connection issue)
+        if (response.status === 503 && retryCount < maxRetries) {
+          const errorText = await response.text();
+          let errorJson;
+          let retryAfter = 0;
+          let isServerless = false;
+          
+          try {
+            // Try to parse as JSON to get structured error
+            errorJson = JSON.parse(errorText);
+            
+            // Check if this is a serverless function and get the retry_after value
+            isServerless = errorJson.is_serverless === true;
+            retryAfter = errorJson.retry_after || 0;
+            
+            console.log(
+              `Datenbank nicht verfügbar, Versuch ${retryCount + 1} von ${maxRetries + 1}. ` +
+              `Status: ${errorJson.readyState || 'unbekannt'}` +
+              (isServerless ? ' (Serverless)' : '')
+            );
+          } catch (e) {
+            // If not JSON, just use default values
+            console.log(`Datenbank nicht verfügbar, Versuch ${retryCount + 1} von ${maxRetries + 1}`);
+          }
+          
+          // Calculate delay - either use retry_after or exponential backoff
+          // For serverless environments, respect the retry_after value if provided
+          const defaultDelay = Math.pow(2, retryCount) * 1000;
+          const delay = retryAfter > 0 ? retryAfter * 1000 : defaultDelay;
+          
+          // Wait with appropriate delay
+          await sleep(delay);
+          
+          // Special case for serverless and connecting state - use longer retries
+          if (isServerless || (errorJson && errorJson.readyState === 2)) {
+            // If we're in a serverless environment or connecting state,
+            // let's be more patient with retries
+            return fetchChats(retryCount + 1, 5); // More retries for serverless
+          }
+          
+          // Standard retry
+          return fetchChats(retryCount + 1, maxRetries);
+        }
+        
+        const errorText = await response.text();
+        let errorMessage;
+        let errorDetails = null;
+        
+        try {
+          // Try to parse as JSON to get structured error
+          const errorJson = JSON.parse(errorText);
+          errorMessage = errorJson.message || errorJson.error || `HTTP error! Status: ${response.status}`;
+          errorDetails = errorJson.details || errorJson.troubleshooting || null;
+          
+          // Better user messages for different connection states
+          if (response.status === 503) {
+            if (errorJson.readyState === 2) {
+              errorMessage = 'Datenbankverbindung wird hergestellt. Bitte versuchen Sie es in einigen Sekunden erneut.';
+              
+              // Trigger an auto-retry in 5 seconds for connecting state
+              setTimeout(() => {
+                console.log('Auto-Retry nach 5 Sekunden für Connecting-Status');
+                fetchChats();
+              }, 5000);
+            } else if (errorJson.is_serverless) {
+              errorMessage = 'Der Server ist gerade im Aufwachprozess. Bitte aktualisieren Sie in einigen Sekunden.';
+            }
+          }
+        } catch (e) {
+          // If not JSON, use plain text with truncation for very long HTML responses
+          errorMessage = errorText.length > 150 ?
+            `${errorText.substring(0, 150)}... (Error ${response.status})` :
+            errorText;
+        }
+        
+        throw new Error(errorMessage);
       }
       
       const data = await response.json();
@@ -34,7 +135,9 @@ export const ChatProvider = ({ children }) => {
       console.error('Fehler beim Laden der Chats:', err);
       setError(err.message || 'Fehler beim Laden der Chats');
     } finally {
-      setLoading(false);
+      if (retryCount === 0 || retryCount >= maxRetries) {
+        setLoading(false);
+      }
     }
   }, []);
 
