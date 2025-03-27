@@ -103,7 +103,6 @@ export const ChatProvider = ({ children }) => {
           // Try to parse as JSON to get structured error
           const errorJson = JSON.parse(errorText);
           errorMessage = errorJson.message || errorJson.error || `HTTP error! Status: ${response.status}`;
-          errorDetails = errorJson.details || errorJson.troubleshooting || null;
           
           // Better user messages for different connection states
           if (response.status === 503) {
