@@ -12,6 +12,7 @@ export const ChatProvider = ({ children }) => {
   const [currentChat, setCurrentChat] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isRetrying, setIsRetrying] = useState(false); // State to track retries
 
   // API-Endpunkt Basis-URL
   const API_BASE_URL = '/api';
@@ -24,24 +25,14 @@ export const ChatProvider = ({ children }) => {
     if (retryCount === 0) {
       setLoading(true);
       setError(null);
+      // Reset retry state only on the initial call
+      if (retryCount === 0) {
+        setIsRetrying(false);
+      }
     }
 
     try {
-      // First check MongoDB connection status
-      let dbStatus = null;
-      try {
-        const statusResponse = await fetch(`${API_BASE_URL}/status`);
-        if (statusResponse.ok) {
-          dbStatus = await statusResponse.json();
-          if (dbStatus.mongodb_state !== 1) {
-            console.log(`Datenbank nicht verbunden, Status: ${dbStatus.mongodb_state} (${dbStatus.mongodb || 'unbekannt'})`);
-          }
-        }
-      } catch (statusErr) {
-        console.warn('Status check failed, proceeding anyway:', statusErr);
-        // Continue with main request even if status check fails
-      }
-
+      // Directly fetch chats, remove initial status check for faster loading
       const response = await fetch(`${API_BASE_URL}/chats`);
       
       // Check if we got HTML instead of JSON (common error when Netlify returns an error page)
@@ -80,6 +71,9 @@ export const ChatProvider = ({ children }) => {
           // For serverless environments, respect the retry_after value if provided
           const defaultDelay = Math.pow(2, retryCount) * 1000;
           const delay = retryAfter > 0 ? retryAfter * 1000 : defaultDelay;
+
+          // Indicate that we are now in a retry state
+          setIsRetrying(true);
           
           // Wait with appropriate delay
           await sleep(delay);
@@ -134,8 +128,10 @@ export const ChatProvider = ({ children }) => {
       console.error('Fehler beim Laden der Chats:', err);
       setError(err.message || 'Fehler beim Laden der Chats');
     } finally {
-      if (retryCount === 0 || retryCount >= maxRetries) {
+      // Stop loading and reset retry state only when definitively finished
+      if (retryCount === 0 || retryCount >= maxRetries || error) {
         setLoading(false);
+        setIsRetrying(false);
       }
     }
   }, []);
@@ -317,6 +313,7 @@ export const ChatProvider = ({ children }) => {
     currentChat,
     loading,
     error,
+    isRetrying, // Expose retry state
     fetchChats,
     fetchChat,
     createChat,

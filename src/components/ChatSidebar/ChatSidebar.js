@@ -8,9 +8,10 @@ const ChatSidebar = () => {
     chats, 
     currentChat, 
     loading, 
-    error, 
-    fetchChats, 
-    createChat, 
+    error,
+    isRetrying, // Get the retry state
+    fetchChats,
+    createChat,
     setCurrentChat,
     fetchChat
   } = useChat();
@@ -73,8 +74,12 @@ const ChatSidebar = () => {
         </div>
         
         {loading ? (
-          <div className="empty-state">
-            <p>Lädt Gespräche...</p>
+          <div className="empty-state loading-state">
+            <p>
+              {isRetrying
+                ? 'Verbindung dauert länger, erneuter Versuch...'
+                : 'Lädt Gespräche...'}
+            </p>
           </div>
         ) : error ? (
           <div className="empty-state error-state">
