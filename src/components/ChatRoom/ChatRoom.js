@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { generateResponse, shuffle } from '../../services/personaService';
 import { useChat } from '../../context/ChatContext';
 import FigureSelection from '../FigureSelection/FigureSelection';
+import ChatSidebar from '../ChatSidebar/ChatSidebar'; // Import ChatSidebar
 import './ChatRoom.css';
 
 
@@ -409,9 +410,9 @@ const ChatRoom = ({ figures, onAddFigure, onRemoveFigure }) => {
       setIsProcessingQueue(false);
     }
   }, [currentChat]);
-
-  return (
+return (
     <div className="chat-room">
+      <ChatSidebar /> {/* Add ChatSidebar here */}
       <FigureSelection
         onSelectFigure={onAddFigure}
         selectedFigures={figures}

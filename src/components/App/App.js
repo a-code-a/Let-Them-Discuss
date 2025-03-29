@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import { ChatProvider } from '../../context/ChatContext';
 import Login from '../Login/Login';
 import ChatRoom from '../ChatRoom/ChatRoom';
-import ChatSidebar from '../ChatSidebar/ChatSidebar';
 import HamburgerMenu from '../HamburgerMenu/HamburgerMenu';
 import '../../styles/App.css';
 
@@ -67,7 +66,7 @@ function App() {
         </header>
         
         <div className="main-content">
-          <ChatSidebar />
+          {/* <ChatSidebar /> Moved into ChatRoom component */}
           <div className="chat-container">
             <ChatRoom
               figures={figures}

@@ -2,9 +2,11 @@
   padding: 20px;
   background: var(--color-background);
   border-radius: 16px;
-  max-height: 80vh;
+  /* max-height: 80vh; */ /* Removed to allow stretching */
   overflow-y: auto;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+  display: flex; /* Added to allow flex properties */
+  flex-direction: column; /* Added to stack children vertically */
 }
 
 .figure-selection::-webkit-scrollbar {
