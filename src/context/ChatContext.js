@@ -280,24 +280,48 @@ export const ChatProvider = ({ children }) => {
       });
       
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      
-      const updatedChat = await response.json();
-      
-      // Aktualisieren der Chats-Liste
-      setChats(prevChats => 
-        prevChats.map(chat => 
-          chat._id === chatId ? updatedChat : chat
-        )
-      );
-      
-      // Aktualisieren des currentChat, wenn es der aktuelle Chat ist
-      if (currentChat && currentChat._id === chatId) {
-        setCurrentChat(updatedChat);
-      }
-      
-      return updatedChat;
+        // Check for non-JSON success response (e.g., 204 No Content)
+        if (response.status === 204) {
+          console.log('Message added successfully (204 No Content)');
+        } else if (response.headers.get('content-type')?.includes('application/json')) {
+          // Process JSON response if available (might contain updated chat metadata)
+          const updatedChatMetadata = await response.json();
+          // Update chat list metadata (e.g., last message time) if needed
+          setChats(prevChats =>
+            prevChats.map(chat =>
+              chat._id === chatId ? { ...chat, ...updatedChatMetadata } : chat // Merge metadata
+            )
+          );
+        } else {
+          // Handle unexpected success response
+          console.warn('Message added, but received unexpected response format:', await response.text());
+        }
+
+        // Optimistic UI Update: Add message locally
+        if (currentChat && currentChat._id === chatId) {
+          setCurrentChat(prev => {
+            // Ensure messages array exists and is an array
+            const existingMessages = Array.isArray(prev.messages) ? prev.messages : [];
+            return {
+              ...prev,
+              messages: [...existingMessages, message] // Append the new message
+            };
+          });
+        }
+        // Also update the message list in the main chats array for consistency in sidebar previews
+        setChats(prevChats =>
+          prevChats.map(chat =>
+            chat._id === chatId ? {
+              ...chat,
+              // Optionally update last message preview here if needed
+              // messages: [...(Array.isArray(chat.messages) ? chat.messages : []), message] // Less efficient for list view
+            } : chat
+          )
+        );
+
+      } // End of response.ok check
+
+      return true; // Indicate success, even without returning full chat
     } catch (err) {
       console.error(`Fehler beim Hinzufügen einer Nachricht zum Chat mit ID ${chatId}:`, err);
       setError(err.message || 'Fehler beim Hinzufügen der Nachricht');
